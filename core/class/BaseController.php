@@ -49,10 +49,15 @@ class BaseController
 		if ($_SERVER['REQUEST_METHOD'] != 'POST')
 		{
 			$out = ob_get_clean();
-			CShop::app()->getCache()->set(get_class($this).$action.serialize($_GET), $out);
+			CShop::app()->getCache()->set(get_class($this).$action.serialize($_GET), $out,20*60);
 			echo $out;
 		}
 		
+	}
+	
+	public function clearCache($action)
+	{
+		CShop::app()->getCache()->delete(get_class($this).$action.serialize($_GET));
 	}
 	
 	public function registerAction($action,$callback)

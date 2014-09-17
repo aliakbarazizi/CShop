@@ -279,7 +279,7 @@ option {
 #slots.active .drophere {
 	display: inline;
 	opacity: 0.3;
-	filter: alpha(opacity = 30);
+	filter: alpha(opacity =   30);
 	MozOpacity: 0.3;
 	KhtmlOpacity: 0.3;
 	position: absolute;
@@ -293,7 +293,7 @@ option {
 #slots.hovered .drophere {
 	display: inline;
 	opacity: 0.8;
-	filter: alpha(opacity = 80);
+	filter: alpha(opacity =   80);
 	MozOpacity: 0.8;
 	KhtmlOpacity: 0.8;
 	position: absolute;
@@ -400,7 +400,8 @@ option {
 	transition: all 0.2s ease 0.0s;
 }
 
-#slots .bottom input[type="text"],#slots .bottom input[type="password"],#slots .bottom textarea,#slots .bottom select {
+#slots .bottom input[type="text"],#slots .bottom input[type="password"],#slots .bottom textarea,#slots .bottom select
+	{
 	margin-bottom: 5px;
 	font-family: 'B Yekan';
 	padding: 5px;
@@ -412,11 +413,12 @@ option {
 
 #slots .bottom select {
 	padding: 0;
-	height:35px;
+	height: 35px;
 	width: 169px;
 	direction: rtl;
 	text-align: right;
 }
+
 #slots .bottom option {
 	padding: 5px;
 }
@@ -652,4 +654,75 @@ option {
 	text-align: center;
 	width: 20px;
 	cursor: pointer;
+}
+
+.user {
+	border: 1px solid #d2d2d2;
+	min-height: 60px;
+	padding: 7px;
+	margin-bottom: 8px;
+}
+
+.user .mtitle {
+	font-weight: bold;
+}
+
+.user .status {
+	margin-left: 25px;
+	float: left;
+	padding: 6px;
+	background: #FE4365;
+	border-radius: 10px;
+	color: #fff;
+	font-family: 'B Yekan';
+	font-size: 13px;
+}
+
+.user .status.success {
+	background: #1FDA9A;
+}
+
+.user .message {
+	padding: 0 10px;
+}
+
+.button {
+	float: left;
+}
+
+.button div {
+	height: 32px;
+	line-height: 32px;
+	direction: ltr;
+	padding-left: 32px;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+.button .like {
+	background: url("../images/like.png") no-repeat;
+	color: #3DBA24;
+}
+
+.button .like:hover {
+	background: url("../images/likehover.png") no-repeat;
+}
+
+.button .liked {
+	color: #3DBA24;
+	background: url("../images/liked.png") no-repeat;
+}
+
+.button .dislike {
+	background: url("../images/dislike.png") no-repeat;
+	color: #F63732;
+}
+
+.button .dislike:hover {
+	background: url("../images/dislikehover.png") no-repeat;
+}
+
+.button .disliked {
+	color: #F63732;
+	background: url("../images/disliked.png") no-repeat;
 }

@@ -1,10 +1,15 @@
 <?php
 $success = false;
-
+$config = include '../config.php';
+if(!empty($config))
+{
+	header('location: ../');
+	exit;
+}
 if (isset($_POST['save']))
 {
 	try {
-		error_reporting(E_ALL & !E_NOTICE);
+		error_reporting(E_ALL & ~E_NOTICE);
 		if (!$_POST['siteurl'] || !$_POST['username'] || !$_POST['password'] || !$_POST['email'] || !$_POST['dbserver'] || !$_POST['dbusername'] || !$_POST['dbdatabase'] )
 			throw new Exception("تمام فیلد ها را کامل کنید");
 		$_POST['dbprefix'] = trim($_POST['dbprefix']);
@@ -13,7 +18,7 @@ if (isset($_POST['save']))
 			throw new Exception('فایل config.php قابل نوشتن نیست');
 		}
 		$url = parse_url($_POST['siteurl']);
-		require '../core/cshop/Database.php';
+		require '../core/class/Database.php';
 		try {
 			$db = new Database(true,$_POST['dbdatabase'],$_POST['dbserver'],$_POST['dbusername'],$_POST['dbpassword']);
 		}
@@ -37,13 +42,14 @@ if (isset($_POST['save']))
 		}
 		file_put_contents('../config.php', $config);
 		$success = true;
-		$message = 'اسکریپت با موفقیت نصب شد<br>لینک مدیریت : <a href="../admin">کلیک کنید</a>';
+		$message = 'اسکریپت با موفقیت نصب شد. میتوانید پوشه install را پاک کنید<br>لینک مدیریت : <a href="../admin">کلیک کنید</a>';
 		
 		try {
 			$sqls = file_get_contents('database.sql');
 			$sqls = str_replace('@{prefix}@', $_POST['dbprefix'], $sqls);
-			foreach (split(';', $sqls) as $sql)
-				$db->exec($sql);
+			foreach (explode(';', $sqls) as $sql)
+				if($sql = trim($sql))
+					$db->exec($sql);
 			$sql = "INSERT INTO `{$_POST['dbprefix']}admin` ( `username`, `password`, `email`) VALUES (?, ?,?);";
 			$sql = $db->prepare($sql);
 			$sql->execute(array($_POST['username'],crypt($_POST['password']),$_POST['email']));
@@ -64,6 +70,7 @@ else
 	$_POST['dbserver'] = 'localhost';
 	$_POST['dbprefix'] = 'cshop_';
 	$_POST['siteurl'] = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://"  . $_SERVER['HTTP_HOST'] . reset((explode('?', $_SERVER['REQUEST_URI'])));
+	$_POST['siteurl'] = str_replace('install', '', trim($_POST['siteurl'],'/'));
 }
 ?>
 <!doctype html>

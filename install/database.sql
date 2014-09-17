@@ -65,9 +65,9 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@input` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
-INSERT INTO `@{prefix}@input` (`id`, `name`, `type`, `order`, `data`) VALUES
-(2, 'ایمیل', 'email', 1, 'a:4:{s:11:"placeholder";s:13:"test@test.com";s:7:"require";s:1:"0";s:9:"minLenght";s:1:"1";s:9:"maxLenght";s:0:"";}'),
-(3, 'شماره تماس', 'mobile', 2, 'a:4:{s:11:"placeholder";s:6:"09****";s:7:"require";s:1:"1";s:9:"minLenght";s:1:"1";s:9:"maxLenght";s:2:"10";}');
+INSERT INTO `@{prefix}@input` ( `name`, `type`, `order`, `data`) VALUES
+( 'ایمیل', 'email', 1, 'a:0:{}'),
+('شماره تماس', 'mobile', 2, 'a:0:{}');
 
 
 CREATE TABLE IF NOT EXISTS `@{prefix}@item` (
