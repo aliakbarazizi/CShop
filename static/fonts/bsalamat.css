@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'B Salamat';
+    src: local('☺'),
+    local('B Salamat'),
+	url('fonts/Bsalamat.eot') format('eot'),
+	url('fonts/Bsalamat.eot?#iefix') format('embedded-opentype'),
+	url('fonts/Bsalamat.woff') format('woff'),
+	url('fonts/Bsalamat.ttf') format('truetype'),
+	url('fonts/Bsalamat.svg') format('svg'),
+	url('fonts/Bsalamat.otf') format('otf');
+	
+    font-weight: normal;
+    font-style: normal;
+
+}

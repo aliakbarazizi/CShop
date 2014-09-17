@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'B Roya';
+    src: local('☺'),
+    local('B Roya'),
+	url('fonts/Broya.eot') format('eot'),
+	url('fonts/Broya.eot?#iefix') format('embedded-opentype'),
+	url('fonts/Broya.woff') format('woff'),
+	url('fonts/Broya.ttf') format('truetype'),
+	url('fonts/Broya.svg') format('svg'),
+	url('fonts/Broya.otf') format('otf');
+	
+    font-weight: normal;
+    font-style: normal;
+
+}

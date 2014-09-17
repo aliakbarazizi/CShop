@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'B Yekan';
+    src: local('☺'),
+    local('B Yekan'),
+	url('fonts/Byekan.eot') format('eot'),
+	url('fonts/Byekan.eot?#iefix') format('embedded-opentype'),
+	url('fonts/Byekan.woff') format('woff'),
+	url('fonts/Byekan.ttf') format('truetype'),
+	url('fonts/Byekan.svg') format('svg'),
+	url('fonts/Byekan.otf') format('otf');
+	
+    font-weight: normal;
+    font-style: normal;
+
+}
