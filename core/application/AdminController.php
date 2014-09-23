@@ -6,7 +6,7 @@ class AdminController extends BaseController
 	public $pageTitle = 'مدیریت';
 	
 	protected $userType = 'admin';
-	
+	protected $cache = array('index');
 	/**
 	 * 
 	 * @var Pagination
