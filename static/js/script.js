@@ -1,7 +1,10 @@
 function handleCardDrop( event, ui )
 {
 	addItem(ui.draggable.attr('data-id'));
-
+}
+function updateprice(price)
+{
+	$("#total span").html(parseInt($("#total span").html())+price);
 }
 function generate(text,type) {
     var n = noty({
@@ -54,7 +57,6 @@ function addItem(id,number)
 	}
 	else
 	{
-		console.log($("#cards #"+id));
 		var name = $("#cards [data-id='"+id+"']").html();
 		if(number==1)
 			$('<div class="item" id="'+id+'"><div class="ind"></div><span>'+name+'</span><div class="close"></div><input type="text" placeholder="تعداد" name="product['+id+']"></div></div>').hide().appendTo($("#cardslots")).slideDown();
@@ -63,6 +65,7 @@ function addItem(id,number)
 		$('#cardslots').perfectScrollbar('update');
 		$('#cardslots').animate({ scrollTop: $('#cardslots')[0].scrollHeight }, 800);
 	}
+	updateprice(parseInt($("#cards [data-id='"+id+"'] .price span").html())*number);
 }
 $(function(){
 	
@@ -70,7 +73,10 @@ $(function(){
 	
 	$(".close").live('click',function() {
 		var $item = $(this).closest('div.item');
+		var val = parseInt($item.find("input[type='text']").val());
+		val = val || 1;
 		$('#cardslots').perfectScrollbar('destroy');
+		updateprice(-1*parseInt($("#cards [data-id='"+$item.attr('id')+"'] .price span").html())*val);
 		$item.stop( true, true ).slideUp('slow', function(){ $item.remove();$('#cardslots').perfectScrollbar({suppressScrollX: true}); });
 	});
 	
@@ -134,6 +140,91 @@ $(function(){
 	});
 	
 	$('#category li').first().trigger('click');
+	$('input').keyup(function(){
+	    $this = $(this);
+	    if($this.val().length == 1)
+	    {
+	        var x =  new RegExp("[\x00-\x80]+"); // is ascii
+
+	        //alert(x.test($this.val()));
+
+	        var isAscii = x.test($this.val());
+
+	        if(isAscii)
+	        {
+	        	$this.css("direction", "ltr");
+	        	$this.css("text-align", "left");
+	        }
+	        else
+	        {
+	            $this.css("direction", "rtl");
+	            $this.css("text-align", "right");
+	        }
+	    }else if($this.val().length == 0 && $this.attr('placeholder').length != 0 )
+	    {
+	    	var val = $this.attr('placeholder').charAt(0);
+	    	var x =  new RegExp("[\x00-\x80]+"); // is ascii
+
+	        //alert(x.test($this.val()));
+
+	        var isAscii = x.test(val);
+
+	        if(isAscii)
+	        {
+	        	$this.css("direction", "ltr");
+	        	$this.css("text-align", "left");
+	        }
+	        else
+	        {
+	            $this.css("direction", "rtl");
+	            $this.css("text-align", "right");
+	        }
+	   	}
+
+	});
 	
+	$('input').each(function(){
+	    $this = $(this);
+	    if($this.val().length != 0 )
+	    {
+	    	var val = $this.val().charAt(0);
+	    	var x =  new RegExp("[\x00-\x80]+"); // is ascii
+
+	        //alert(x.test($this.val()));
+
+	        var isAscii = x.test(val);
+
+	        if(isAscii)
+	        {
+	        	$this.css("direction", "ltr");
+	        	$this.css("text-align", "left");
+	        }
+	        else
+	        {
+	            $this.css("direction", "rtl");
+	            $this.css("text-align", "right");
+	        }
+	    }
+	    else if($this.attr('placeholder').length != 0 )
+	    {
+	    	var val = $this.attr('placeholder').charAt(0);
+	    	var x =  new RegExp("[\x00-\x80]+"); // is ascii
+
+	        //alert(x.test($this.val()));
+
+	        var isAscii = x.test(val);
+
+	        if(isAscii)
+	        {
+	        	$this.css("direction", "ltr");
+	        	$this.css("text-align", "left");
+	        }
+	        else
+	        {
+	            $this.css("direction", "rtl");
+	            $this.css("text-align", "right");
+	        }
+	   	}
+
+	});
 });
-	

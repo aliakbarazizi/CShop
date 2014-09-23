@@ -22,7 +22,15 @@ abstract class PluginBase
 				)
 		);
 	}
+	public static function install($id)
+	{
+		
+	}
 	
+	public static function uninstall($id)
+	{
+		
+	}
 	public static function getParameterByName($name)
 	{
 		$r = static::getParameters();

@@ -14,7 +14,9 @@ class CShop
 	 * @var Application
 	 */
 	private static $_application;
-	private static $_classMap = array(
+	
+	private static $_classMap = array();
+	private static $_coreclass = array(
 		'Application' => '/Application.php',
 		
 		'BaseController' => '/class/BaseController.php',
@@ -36,6 +38,7 @@ class CShop
 		'Validate' => '/class/Validate.php',
 		
 		'jDateTime' => '/library/jDateTime.php',
+		'nusoap_client' => '/library/nusoap.php',
 		'PHPMailder' => '/library/PHPMailder.php',
 	);
 	private static $_includePath = array(
@@ -56,6 +59,8 @@ class CShop
 		
 		self::import(self::$corepath.'/class/*');
 		self::import(self::$corepath.'/library/*');
+		self::import(self::$gatewaypath.'/*');
+		self::import(self::$pluginpath .'/*');
 		
 		self::$baseurl = $config['site']['path'];
 		
@@ -92,7 +97,11 @@ class CShop
 	
 	public static function autoload($className)
 	{
-		if (isset(self::$_classMap[$className]))
+		if (isset(self::$_coreclass[$className]))
+		{
+			include CShop::$corepath.self::$_coreclass[$className];
+		}
+		elseif (isset(self::$_classMap[$className]))
 		{
 			include self::$_classMap[$className];
 		}
@@ -124,7 +133,7 @@ class CShop
 			if (self::$_useIncludePath)
 				set_include_path(get_include_path() . PATH_SEPARATOR . substr($className, 0,strlen($className)-1));
 			else 
-				self::$_includePath[] = $className;
+				self::$_includePath[] = substr($className, 0,strlen($className)-2);
 		}
 		else
 		{

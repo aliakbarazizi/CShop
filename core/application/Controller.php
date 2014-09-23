@@ -5,6 +5,8 @@ class Controller extends BaseController
 	
 	public $pageTitle = 'صفحه اصلی';
 	
+	protected $cache = array('index');
+	
 	public function actionIndex()
 	{
 		$message['content']  = '';

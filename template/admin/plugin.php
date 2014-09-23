@@ -33,7 +33,7 @@
 	<?php endif;?>
 </form>
 </div>
-<div class="title">مدیریت دسته ها</div>
+<div class="title">پلاگین های جدید</div>
 <div class="content">
 <form action="" method="post">
 	<table>

@@ -129,7 +129,7 @@ class Application
 		if (is_array($action))
 		{
 			$this->_action = $action[1];
-			$action[0] .= 'controller';
+			$action[0] .= 'Controller';
 			CShop::import(Cshop::$corepath . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . $action[0] .'.php',true);
 			$this->_controller = new $action[0]();
 			$this->_controller->init();

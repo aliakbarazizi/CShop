@@ -5,5 +5,5 @@ if(empty($config))
 	header("location: install/");
 	exit;
 }
-require 'core/cshop.php';
+require 'core/CShop.php';
 Cshop::create($config)->run('index');

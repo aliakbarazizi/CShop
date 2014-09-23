@@ -101,8 +101,6 @@ class AdminController extends BaseController
 	public function actionEditInput()
 	{
 		$message = $this->user->message();
-	
-	
 		if (!isset($_GET['id'])) {
 			Cshop::app()->redirect('input.php');
 		}
@@ -704,6 +702,7 @@ class AdminController extends BaseController
 			foreach ($class::getParameters() as $key=>$value)
 				$this->db->exec(QueryBuilder::getInstance()->insert('gateway_meta')->into('gatewayid,`key`,value')->values(array($id,$key,'')));
 			$data = $class::install($id);
+			CShop::app()->getCache()->flush();
 			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
 			$message['type'] = 'success';
 			$this->user->message($message);
@@ -750,7 +749,7 @@ class AdminController extends BaseController
 			$r[$key] = 'plugindata.php?id='.$gateways[0]['id'].'&action='.$value;
 		
 		$actions = array($gateways[0]['name']=>$r);
-		if(!empty($actions))
+		if(!empty($r))
 		{
 			CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) use ($actions) { $menu=array_merge($actions,$menu); });
 		}
@@ -834,6 +833,7 @@ class AdminController extends BaseController
 			foreach ($class::getParameters() as $key=>$value)
 				$this->db->exec(QueryBuilder::getInstance()->insert('plugin_meta')->into('pluginid,`key`,value')->values(array($id,$key,'')));
 			$data = $class::install($id);
+			CShop::app()->getCache()->flush();
 			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
 			$message['type'] = 'success';
 			$this->user->message($message);
@@ -880,7 +880,7 @@ class AdminController extends BaseController
 			$r[$key] = 'plugindata.php?id='.$plugins[0]['id'].'&action='.$value;
 		
 		$actions = array($plugins[0]['name']=>$r);
-		if(!empty($actions))
+		if(!empty($r))
 		{
 			CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) use ($actions) { $menu=array_merge($actions,$menu); });
 		}

@@ -15,10 +15,10 @@
 				<input type="hidden" value="<?php echo $row['id']?>" name="cid">
 				<input type="hidden" value="0" name="like">
 			</form>
-			<div onclick="document.like<?php echo $row['id']?>.submit();  setTimeout(function(){document.clear.submit()}, 3000);" class="<?php echo $row['liked'] ? 'liked' : 'like'?>"><?php echo $row['like'] ?></div>
-			<div onclick="document.dislike<?php echo $row['id']?>.submit(); setTimeout(function(){document.clear.submit()}, 3000);" class="<?php echo $row['disliked'] ? 'disliked' : 'dislike'?>"><?php echo $row['dislike'] ?></div>
+			<div onclick="document.like<?php echo $row['id']?>.submit();  setTimeout(function(){document.clear.submit()}, 3000);" class="<?php echo $row['liked'] ? 'liked' : 'like'?>"><?php echo (int)$row['like'] ?></div>
+			<div onclick="document.dislike<?php echo $row['id']?>.submit(); setTimeout(function(){document.clear.submit()}, 3000);" class="<?php echo $row['disliked'] ? 'disliked' : 'dislike'?>"><?php echo (int)$row['dislike'] ?></div>
 		</div>
-		<?php if($row['status']!=3) echo $row['status']==1 ? '<div class="status">در حال بررسی</div>' : '<div class="status success">انجام شده</div>' ?>
+		<?php echo $row['status']==1 ? '<div class="status">در حال بررسی</div>' : ($row['status']==2 ? '<div class="status success">انجام شده</div>' : ($row['status']==3 ? '<div class="status news">اخبار</div>' : '<div class="status faq">سایر</div>')) ?>
 		<div class="mtitle"><?php echo $row['title']?></div>
 		<div class="message"><?php echo $row['content']?>
 		</div>

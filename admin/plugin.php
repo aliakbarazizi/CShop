@@ -1,5 +1,5 @@
 <?php
 $config = include '../config.php';
 
-require '../core/cshop.php';
+require '../core/CShop.php';
 Cshop::create($config)->run(array('admin','plugin'));

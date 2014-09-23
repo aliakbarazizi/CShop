@@ -4,8 +4,10 @@
 			<div id="dropholder">
 				<div class="title">سبد خرید</div><div class="drophere"></div>
 				<div id="cardslots">
+				
 				</div>
 			</div>
+			<div id="total">جمع کل : <span>0</span> ریال</div>
 			<div class="bottom">
 			<?php foreach ($input as $key=>$value):$value['data'] = unserialize($value['data'])?>
 				<label><?php echo $value['name']?></label>

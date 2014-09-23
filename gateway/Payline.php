@@ -11,9 +11,9 @@ class Payline extends GatewayBase
 				'note' => 'payline',
 				'author' => array (
 						'name' => 'Ir-prog',
-						'url' => 'http://ir-prog.ir',
-						'email' => 'admin@ir-prog.ir' 
-				) 
+						'url' => 'http://irprog.com',
+						'email' => 'cshop@irprog.com' 
+				)
 		);
 	}
 
@@ -58,7 +58,6 @@ class Payline extends GatewayBase
 
 	public function callbackGateway()
 	{
-		global $db, $get, $smarty;
 		$api = $this->pin;
 		$url = 'http://payline.ir/payment-test/gateway-result-second';
 		$trans_id = $_POST['trans_id'];

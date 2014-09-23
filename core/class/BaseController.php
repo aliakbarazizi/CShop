@@ -6,6 +6,8 @@ class BaseController
 	
 	public $pageTitle;
 	
+	protected $cache = array();
+	
 	/**
 	 * 
 	 * @var Database
@@ -31,7 +33,7 @@ class BaseController
 	
 	public function beforeAction($action)
 	{
-		if ($_SERVER['REQUEST_METHOD'] != 'POST')
+		if ($_SERVER['REQUEST_METHOD'] != 'POST' && in_array(strtolower($action), $this->cache) !==false)
 		{
 			if ($out = CShop::app()->getCache()->get(get_class($this).$action.serialize($_GET)))
 			{
@@ -46,7 +48,7 @@ class BaseController
 	
 	public function afterAction($action)
 	{
-		if ($_SERVER['REQUEST_METHOD'] != 'POST')
+		if ($_SERVER['REQUEST_METHOD'] != 'POST' && in_array(strtolower($action), $this->cache) !== false)
 		{
 			$out = ob_get_clean();
 			CShop::app()->getCache()->set(get_class($this).$action.serialize($_GET), $out,20*60);
