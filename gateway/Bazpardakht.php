@@ -1,5 +1,5 @@
 <?php
-class Payline extends GatewayBase
+class Bazpardakht extends GatewayBase
 {
 
 	protected $merchantID;
