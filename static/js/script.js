@@ -140,7 +140,7 @@ $(function(){
 	});
 	
 	$('#category li').first().trigger('click');
-	$('input').keyup(function(){
+	$('input,textarea').keyup(function(){
 	    $this = $(this);
 	    if($this.val().length == 1)
 	    {
@@ -183,7 +183,7 @@ $(function(){
 
 	});
 	
-	$('input').each(function(){
+	$('input,textarea').each(function(){
 	    $this = $(this);
 	    if($this.val().length != 0 )
 	    {

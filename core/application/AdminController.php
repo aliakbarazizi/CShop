@@ -1,5 +1,5 @@
 <?php 
-class AdminController extends BaseController
+class adminController extends BaseController
 {
 	public $layout = 'layout/admin';
 	
