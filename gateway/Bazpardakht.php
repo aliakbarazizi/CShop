@@ -1,4 +1,12 @@
 <?php
+/**
+ * Bazpardakht Gateway
+ * @author Ali Akbar Azizi <aliakbar.azizi20@gmail.com>
+ * @link http://cshop.irprog.com
+ * @copyright 2014 CShop
+ * @license http://cshop.irprog.com/licence.txt
+ * @package components.gateway
+ */
 class Bazpardakht extends GatewayBase
 {
 
@@ -8,7 +16,7 @@ class Bazpardakht extends GatewayBase
 	{
 		return array (
 				'name' => 'پرداخت آنلاین با Bazpardakht',
-				'note' => 'payline',
+				'note' => 'Bazpardakht',
 				'author' => array (
 						'name' => 'Ir-prog',
 						'url' => 'http://irprog.com',
@@ -65,32 +73,6 @@ class Bazpardakht extends GatewayBase
 
 	public function callbackGateway()
 	{
-		$api = $this->pin;
-		$url = 'http://payline.ir/payment-test/gateway-result-second';
-		$trans_id = $_POST['trans_id'];
-		$id_get = $_POST['id_get'];
-		$result = $this->get($url, $api, $trans_id, $id_get);
-		if ($result == 1)
-		{
-			$payment = Cshop::app()->getDb()->prepare(QueryBuilder::getInstance()->select()->from('payment')->where('reference = ?'));
-			$payment->execute(array($id_get));
-			$payment = $payment->fetch();
-			if ($payment)
-			{
-				return $payment;
-			}
-			else
-			{
-				$message= 'اطلاعات پرداخت کامل نیست.';
-			}
-		}
-		else
-		{
-			$message = 'پرداخت موفقيت آميز نبود';
-		}
-		throw new Exception($message);
-		
-		
 		if($_POST['status']!='1'){
 			$message = 'پرداخت با موفقيت انجام نشده است.';
 			throw new Exception($message);

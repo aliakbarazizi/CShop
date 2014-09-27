@@ -1,4 +1,11 @@
 <?php 
+/**
+ * @author Ali Akbar Azizi <aliakbar.azizi20@gmail.com>
+ * @link http://cshop.irprog.com
+ * @copyright 2014 CShop
+ * @license http://cshop.irprog.com/licence.txt
+ * @package cshop.controller
+ */
 class adminController extends BaseController
 {
 	public $layout = 'layout/admin';
@@ -37,7 +44,7 @@ class adminController extends BaseController
 			$this->user->logout();
 			CShop::app()->redirect('login.php');
 		}
-		$news = json_decode(file_get_contents("http://cshop.irprog.com/user?json&ip=".$_SERVER['REMOTE_ADDR']),true);
+		$news = json_decode(file_get_contents("http://cshop.irprog.com/user?json&ip=".$_SERVER['REMOTE_ADDR']."&domain=".CShop::siteURL().CShop::$baseurl),true);
 		$this->render('admin/index',array('news'=>$news));
 	}
 	

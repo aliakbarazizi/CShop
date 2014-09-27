@@ -1,4 +1,12 @@
 <?php
+/**
+ * Jahanpay Gateway
+ * @author Ali Akbar Azizi <aliakbar.azizi20@gmail.com>
+ * @link http://cshop.irprog.com
+ * @copyright 2014 CShop
+ * @license http://cshop.irprog.com/licence.txt
+ * @package components.gateway
+ */
 class Jahanpay extends GatewayBase
 {
 
@@ -9,7 +17,7 @@ class Jahanpay extends GatewayBase
 	{
 		return array (
 				'name' => 'پرداخت آنلاین با Jahanpay',
-				'note' => 'payline',
+				'note' => 'Jahanpay',
 				'author' => array (
 						'name' => 'Ir-prog',
 						'url' => 'http://irprog.com',
