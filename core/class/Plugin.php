@@ -8,6 +8,10 @@
  */
 abstract class Plugin extends PluginBase
 {
+	/**
+	 * 
+	 * @param EventHandler $eventHandler
+	 */
 	public abstract function register($eventHandler);
 	
 }

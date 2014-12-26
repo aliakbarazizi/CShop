@@ -15,7 +15,7 @@ class Database extends PDO
 	private $db_pass = ""; // password
 	private $db_dbname = "cshop"; // database name
 	private $db_charset = "utf8"; // optional character set (i.e. utf8)
-	
+
 	function __construct($connect = true, $database = null, $server = null, $username = null, $password = null, $charset = null, $option = null)
 	{
 		if ($database !== null)

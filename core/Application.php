@@ -23,6 +23,7 @@ class Application
 	const EVENT_AFTER_PAYMENT = 'afterpayment';
 	const EVENT_END = 'end';
 	const EVENT_MENU = 'menu';
+	const EVENT_PAGE = 'page';
 	const EVENT_ITEM_TYPE = 'itemtype';
 	
 	const APPLICATON_CONFIG_CATEGORY = 'system';
@@ -53,6 +54,8 @@ class Application
 	
 	private $_language = array();
 	
+	
+	private $_externalActions = array();
 	
 	public function __construct($config)
 	{
@@ -94,9 +97,19 @@ class Application
 		return $this->_eventHandler;
 	}
 	
+	public function getController()
+	{
+		return $this->_controller;
+	}
+	
 	public function raise($name, $arguments=array())
 	{
 		return $this->_eventHandler->raise($name, $arguments);
+	}
+	
+	public function registerExternalAction($on,$param,$callback)
+	{
+		$this->_externalActions[$on][] = array('callback'=>$callback,'param'=>$param);
 	}
 	
 	public function initialise()
@@ -112,19 +125,19 @@ class Application
 		
 		if (! $plugins = $this->_cache->get('system__plugin'))
 		{
-			$sql = 	$this->_db->query(QueryBuilder::getInstance()->select('*')->from('plugin')->leftJoin('plugin_meta')->on('pluginid = plugin.id')->where('status = 1'));
+			$sql = 	$this->_db->query(QueryBuilder::getInstance()->select('*,plugin.id')->from('plugin')->leftJoin('plugin_meta')->on('pluginid = plugin.id')->where('status = 1'));
 			$plugins = array();
 			while ($row = $sql->fetch())
 			{
+				$pluginids[$row['class']] = $row['id'];
 				$plugins[$row['class']][] = array('key'=>$row['key'],'value'=>$row['value']);
 			}
 			$this->_cache->set('system__plugin', $plugins);
 		}
-		
 		foreach ($plugins as $key=>$value)
 		{
 			CShop::import(CShop::$pluginpath . DIRECTORY_SEPARATOR . $key . '.php',true);
-			$event = new $key($value);
+			$event = new $key($pluginids[$key],$value);
 			$event->register($this->_eventHandler);
 		}
 	}
@@ -149,9 +162,23 @@ class Application
 		else 
 		{
 			$this->_action = $action;
+			
 			CShop::import(Cshop::$corepath . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'Controller.php',true);
 			$this->_controller = new Controller();
 			$this->_controller->init();
+			
+			if (isset($this->_externalActions[$action]))
+			{
+				foreach ($this->_externalActions[$action] as $a)
+				{
+					if (isset($_GET[$a['param']]))
+					{
+						call_user_func_array($a['callback'], array($_GET[$a['param']]));
+						CShop::app()->end();
+					}
+				}
+			}
+			
 			if (method_exists($this->_controller, 'action'.$action))
 			{
 				call_user_func_array(array($this->_controller,'runAction'),array($action,$param));

@@ -16,10 +16,11 @@ class QueryBuilder
 		if ($prefix == null)
 		{
 			$prefix = CShop::app()->getConfig('database');
-			$prefix = $prefix['prefix'];	
+			$prefix = $prefix['prefix'];
 		}
 		return new self($prefix);
 	}
+
 	
 	public function __construct($prefix='')
 	{

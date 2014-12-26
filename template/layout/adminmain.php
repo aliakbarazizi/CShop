@@ -1,21 +1,11 @@
-<?php 
-$pages = array(
-		CShop::app()->systemConfig()->sitetitle => CShop::$baseurl,
-		
-);
-CShop::app()->raise(Application::EVENT_PAGE, array(&$pages));
-?>
 <!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
-
-<meta content="no-cache" http-equiv="Pragma"></meta>
-<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"></meta>
-<meta content="0" http-equiv="Expires"></meta>
-
 <title><?php echo CShop::app()->systemConfig()->sitetitle . ' - ' . $this->pageTitle?></title>
-<link rel="stylesheet" href="<?php echo Cshop::$baseurl?>/static/css/style.css" type="text/css"/>
+<link rel="stylesheet" href="<?php echo Cshop::$baseurl?>/static/css/admin.css">
+<link href="<?php echo Cshop::$baseurl?>/static/css/perfect-scrollbar.css" rel="stylesheet">
+
 <script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.js"></script>
 <script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery-ui.js"></script>
 <script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.easing.min.js"></script>
@@ -25,22 +15,26 @@ CShop::app()->raise(Application::EVENT_PAGE, array(&$pages));
 <script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.placeholder.js"></script>
 <script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.noty.packaged.min.js"></script>
 <script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/script.js"></script>
-<link href="<?php echo Cshop::$baseurl?>/static/css/perfect-scrollbar.css" rel="stylesheet">
-
 </head>
 <body>
-<div class="menu">
-	<div class="wrp">
-		<div class="logo">
-			ONLINE CSHOP<span>ONLINE PAYMENT STORE</span>
+<div id="header">
+	<div class="inner-header">
+		<div class="toplogo" onclick="window.location = '<?php echo CShop::$baseurl?>';" style="cursor:pointer;">
 		</div>
-		<a class="home" href="<?php echo CShop::$baseurl?>"></a>
-		
-		<?php foreach ($pages as $name=>$link):?>
-		<a href="<?php echo $link?>" class="<?php if(rtrim($_SERVER['REQUEST_URI'],'/') == $link) echo 'active'?>"><?php echo $name?></a>
-		<?php endforeach;?>
-	</div>
+		<div id ="topmenu">
+			<div class="menu">
+				<div class="menu-main-container">
+					<ul id="menu-main" class="menu">
+						<li class="menu-item "><a href="<?php echo CShop::$baseurl?>" class="active"><?php echo CShop::app()->systemConfig()->sitetitle?></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div> 
 </div>
+<div id="content">
 	<?php echo $content?>
+</div>
+<div id="footer"><a href="http://irprog.com" target="_blank">Cshop</a></div>
 </body>
 </html>

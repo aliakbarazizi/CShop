@@ -14,4 +14,4 @@ $(function() {
 );
 <?php endif;?>
 </script>
-<?php $this->endRender('layout/main')?>
+<?php $this->endRender('layout/adminmain')?>

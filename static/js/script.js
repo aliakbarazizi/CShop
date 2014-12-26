@@ -47,7 +47,7 @@ function addItem(id,number)
 {
 	number = typeof number !== 'undefined' ? number : 1;
 	
-	var obj = $('#cardslots #'+id);
+	var obj = $('.endbuy #'+id);
 	if (obj.length)
 	{
 		obj.stop( true, true ).effect('highlight',{easing : 'easeInCubic'},2000);
@@ -57,27 +57,37 @@ function addItem(id,number)
 	}
 	else
 	{
-		var name = $("#cards [data-id='"+id+"']").html();
+		var name = $("#cards [data-id='"+id+"'] span.name").html();
 		if(number==1)
-			$('<div class="item" id="'+id+'"><div class="ind"></div><span>'+name+'</span><div class="close"></div><input type="text" placeholder="تعداد" name="product['+id+']"></div></div>').hide().appendTo($("#cardslots")).slideDown();
+			$('	<div class="buy" id="'+id+'"><div class="delete"></div>'+name+'<input type="text" placeholder="تعداد" name="product['+id+']"></div>').hide().appendTo($(".endbuy")).slideDown();
 		else
-			$('<div class="item" id="'+id+'"><div class="ind"></div><span>'+name+'</span><div class="close"></div><input type="text" placeholder="تعداد" value="'+number+'" name="product['+id+']"></div></div>').hide().appendTo($("#cardslots")).slideDown();
-		$('#cardslots').perfectScrollbar('update');
-		$('#cardslots').animate({ scrollTop: $('#cardslots')[0].scrollHeight }, 800);
+			$('<div class="buy" id="'+id+'"><div class="delete"></div>'+name+'<input type="text" placeholder="تعداد" value="'+number+'" name="product['+id+']"></div>').hide().appendTo($(".endbuy")).slideDown();
+		$('.endbuy').perfectScrollbar('update');
+		$('.endbuy').animate({ scrollTop: $('.endbuy')[0].scrollHeight }, 800);
 	}
-	updateprice(parseInt($("#cards [data-id='"+id+"'] .price span").html())*number);
+	updateprice(parseInt($("#cards [data-id='"+id+"'] span.f").html())*number);
 }
 $(function(){
 	
 	var $filteredData;
 	
-	$(".close").live('click',function() {
-		var $item = $(this).closest('div.item');
+	$(".delete").live('click',function() {
+		var $item = $(this).closest('div.buy');
 		var val = parseInt($item.find("input[type='text']").val());
 		val = val || 1;
-		$('#cardslots').perfectScrollbar('destroy');
-		updateprice(-1*parseInt($("#cards [data-id='"+$item.attr('id')+"'] .price span").html())*val);
+		$('.endbuy').perfectScrollbar('destroy');
+		updateprice(-1*parseInt($("#cards [data-id='"+$item.attr('id')+"'] span.f").html())*val);
 		$item.stop( true, true ).slideUp('slow', function(){ $item.remove();$('#cardslots').perfectScrollbar({suppressScrollX: true}); });
+	});
+	
+	$(".endbuy input").live('keyup',function() {
+		$("#total span").html(0);
+		$('.endbuy .buy').each(function(){
+			var $item = $(this).find('input').val();
+			var id = $(this).attr('id');
+			updateprice(parseInt($("#cards [data-id='"+id+"'] span.f").html()) * parseInt($item));
+		}
+		);
 	});
 	
 	$(".noty_modal").live('click',function() {
@@ -95,17 +105,17 @@ $(function(){
 	
 	//init plugins
 	$('input, textarea').placeholder();
-	$('#cardslots').perfectScrollbar({suppressScrollX: true});
+	$('.endbuy').perfectScrollbar({suppressScrollX: true});
 	
-	$('#slots').droppable( {
+	$('.endbuy').droppable( {
 		accept: '#cards .item',
 		hoverClass: 'hovered',
 		activeClass : 'active',
 		drop: handleCardDrop
 		});
-		  
+		 
 	$('#cards .item').draggable( {
-		containment: '#content',
+		containment: '.content',
 		revert:true,
 		cursor: 'move',
 		helper: "clone",
@@ -114,21 +124,16 @@ $(function(){
 	
 	
 	var $applications = $('#cards');
-	var $data = $applications.clone();
 	
 	$('#category li').click(function(e) {
 		$(this).parent().find('li.active').removeClass('active');
 		$(this).addClass('active');
-		 $filteredData = $data.find('[data-type=' + $(this).attr('data-type') + ']');
+		$applications.find('[data-type!=' + $(this).attr('data-type') + ']').stop( true, true ).hide();
+		$applications.find('[data-type=' + $(this).attr('data-type') + ']').stop( true, true ).slideDown(500).children().slideDown(1200);
 		
-		$applications.quicksand($filteredData, {
-			duration: 800,
-			easing: 'easeInOutQuad',
-			useScaling:true	
-			});
 		
 		$('#cards .item').draggable( {
-			containment: '#content',
+			containment: '.content',
 			revert:true,
 			cursor: 'move',
 			helper: "clone",
@@ -140,6 +145,7 @@ $(function(){
 	});
 	
 	$('#category li').first().trigger('click');
+	
 	$('input,textarea').keyup(function(){
 	    $this = $(this);
 	    if($this.val().length == 1)

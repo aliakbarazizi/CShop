@@ -54,6 +54,11 @@ abstract class PluginBase
 		return array();
 	}
 	
+	public static function getActionLink($action,$id)
+	{
+		return 'plugindata.php?id='.$id.'&action='.$action;
+	}
+	
 	public static function saveMeta($id,$meta=array())
 	{
 		foreach ($meta as $key=>$value)
@@ -120,15 +125,16 @@ abstract class PluginBase
 	
 	protected $id;
 	
-	public function __construct($setting=array())
+	public function __construct($id,$setting)
 	{
+		$this->id = $id;
 		$this->init($setting);
 	}
 	
 	public function init($setting=array())
 	{
 		if(!is_array($setting))
-			return;
+			return ;
 		foreach ($setting as $name)
 		{
 			$this->{$name['key']} = $name['value'];

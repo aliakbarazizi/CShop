@@ -13,7 +13,7 @@ class adminController extends BaseController
 	public $pageTitle = 'مدیریت';
 	
 	protected $userType = 'admin';
-	protected $cache = array('index');
+//	protected $cache = array('index');
 	/**
 	 * 
 	 * @var Pagination
@@ -119,7 +119,7 @@ class adminController extends BaseController
 			Cshop::app()->redirect('input.php');
 		}
 	
-		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['ورودی ها']['ویرایش فیلد'] =  'editinput.php?id='.$_GET['id']; });
+		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['ورودی ها']['ویرایش فیلد'] =  CShop::$baseurl.'/admin/'.'editinput.php?id='.$_GET['id']; });
 	
 		if (isset($_POST['save']))
 		{
@@ -234,7 +234,7 @@ class adminController extends BaseController
 			Cshop::app()->redirect('category.php');
 		}
 		
-		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['دسته ها']['ویرایش دسته'] =  'editcategory.php?id='.$_GET['id']; });
+		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['دسته ها']['ویرایش دسته'] =  CShop::$baseurl.'/admin/'.'editcategory.php?id='.$_GET['id']; });
 		
 		if (isset($_POST['save']))
 		{
@@ -348,7 +348,7 @@ class adminController extends BaseController
 		if (!$products) {
 			Cshop::app()->redirect('product.php');
 		}
-		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['محصولات']['ویرایش محصول'] =  'editproduct.php?id='.$_GET['id']; });
+		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['محصولات']['ویرایش محصول'] =  CShop::$baseurl.'/admin/'.'editproduct.php?id='.$_GET['id']; });
 		
 		if (isset($_POST['save']))
 		{
@@ -509,7 +509,7 @@ class adminController extends BaseController
 		if (!$items) {
 			Cshop::app()->redirect('item.php');
 		}
-		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['کارت ها']['ویرایش کارت'] =  'edititem.php?id='.$_GET['id']; });
+		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['کارت ها']['ویرایش کارت'] =  CShop::$baseurl.'/admin/'.'edititem.php?id='.$_GET['id']; });
 		
 		if (isset($_POST['save']))
 		{
@@ -690,6 +690,16 @@ class adminController extends BaseController
 			$this->user->message($message);
 			CShop::app()->redirect('gateway.php');
 		}
+		elseif(isset($_GET['active']))
+		{
+			CShop::app()->getCache()->flush();
+			$gateway= $this->db->prepare(QueryBuilder::getInstance()->update('gateway')->set('status = (status+1)%2')->where('id = ?'));
+			$gateway->execute(array($_GET['active']));
+			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
+			$message['type'] = 'success';
+			$this->user->message($message);
+			CShop::app()->redirect('gateway.php');
+		}
 		elseif(isset($_GET['install']))
 		{
 			$class = str_replace(chr(0), '', basename($_GET['install']));
@@ -753,7 +763,7 @@ class adminController extends BaseController
 		$class = $gateways[0]['class'];
 		
 		foreach ($r=$class::getActions() as $key=>$value)
-			$r[$key] = 'plugindata.php?id='.$gateways[0]['id'].'&action='.$value;
+			$r[$key] = CShop::$baseurl.'/admin/'.'plugindata.php?id='.$gateways[0]['id'].'&action='.$value;
 		
 		$actions = array($gateways[0]['name']=>$r);
 		if(!empty($r))
@@ -769,7 +779,7 @@ class adminController extends BaseController
 				CShop::app()->end();
 			}
 		}
-		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['تنظیمات']['ویرایش درگاه'] =  'gatewaydata.php?id='.$_GET['id']; });
+		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['تنظیمات']['ویرایش درگاه'] =  CShop::$baseurl.'/admin/'.'gatewaydata.php?id='.$_GET['id']; });
 		
 		if (isset($_POST['save']))
 		{
@@ -817,6 +827,16 @@ class adminController extends BaseController
 				$sql = $this->db->prepare(QueryBuilder::getInstance()->delete('plugin')->where('id = ?'));
 				$sql->execute(array($value));
 			}
+			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
+			$message['type'] = 'success';
+			$this->user->message($message);
+			CShop::app()->redirect('plugin.php');
+		}
+		elseif(isset($_GET['active']))
+		{
+			CShop::app()->getCache()->flush();
+			$gateway= $this->db->prepare(QueryBuilder::getInstance()->update('plugin')->set('status = (status+1)%2')->where('id = ?'));
+			$gateway->execute(array($_GET['active']));
 			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
 			$message['type'] = 'success';
 			$this->user->message($message);
@@ -882,9 +902,9 @@ class adminController extends BaseController
 			Cshop::app()->redirect('plugin.php');
 		}
 		$class = $plugins[0]['class'];
-		
+		/* @var $class Plugin */
 		foreach ($r=$class::getActions() as $key=>$value)
-			$r[$key] = 'plugindata.php?id='.$plugins[0]['id'].'&action='.$value;
+			$r[$key] = CShop::$baseurl.'/admin/'.$class::getActionLink($value, $plugins[0]['id']);
 		
 		$actions = array($plugins[0]['name']=>$r);
 		if(!empty($r))
@@ -896,12 +916,12 @@ class adminController extends BaseController
 		{
 			if(method_exists($class, 'action'.$_GET['action']))
 			{
-				call_user_func(array(new $class($plugins),'action'.$_GET['action']),$this);
+				call_user_func(array(new $class($plugins[0]['id'],$plugins),'action'.$_GET['action']),$this);
 				CShop::app()->end();
 			}
 		}
 		
-		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['تنظیمات']['ویرایش پلاگین'] =  'plugindata.php?id='.$_GET['id']; });
+		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['تنظیمات']['ویرایش پلاگین'] =  CShop::$baseurl.'/admin/'.'plugindata.php?id='.$_GET['id']; });
 		
 		if (isset($_POST['save']))
 		{
@@ -1022,7 +1042,7 @@ class adminController extends BaseController
 		{
 			$items[$item['id']][] = $item;
 		}
-		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['خرید ها']['مشاهده خرید'] =  'viewpayment.php?id='.$_GET['id']; });
+		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['خرید ها']['مشاهده خرید'] =  CShop::$baseurl.'/admin/'.'viewpayment.php?id='.$_GET['id']; });
 		
 		
 		$this->render('admin/paymentview', array('message'=>$message,'payment'=>$payment,'items'=>$items));

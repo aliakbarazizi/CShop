@@ -18,7 +18,7 @@
 			echo '<td>'.$i++.'</td>';
 			echo '<td>'.$item['name'].'</td>';
 			echo '<td><input type="text" name="order['.$item['id'].']" value="'.$item['order'].'"></td>';
-			echo '<td><a href="plugindata.php?id='.$item['id'].'">ویرایش</a></td>';
+			echo '<td><a href="plugindata.php?id='.$item['id'].'">ویرایش</a> | <a href="plugin.php?active='.$item['id'].'">'.($item['status'] == 1 ? 'غیر فعال کردن' : 'فعال کردن').'</a></td>';
 			echo '<td><input type="checkbox" name="delete[]" value="'.$item['id'].'"></td>';
 			echo '</tr>';
 		}

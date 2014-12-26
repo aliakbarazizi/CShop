@@ -38,6 +38,11 @@ class BaseController
 		$this->user = new User();
 	}
 	
+	public function getUser()
+	{
+		return $this->user;
+	}
+	
 	public function beforeAction($action)
 	{
 		if ($_SERVER['REQUEST_METHOD'] != 'POST' && in_array(strtolower($action), $this->cache) !==false)
