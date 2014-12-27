@@ -4,7 +4,7 @@
 <?php
 foreach ($items as $item)
 {
-	if(! $out=$item['class']::proccessInput($item['key'],"meta[{$item['key']}]",$item['value'],array('id'=>$item['key']))) continue;
+	if(! $item['key'] || !$out=$item['class']::proccessInput($item['key'],"meta[{$item['key']}]",$item['value'],array('id'=>$item['key']))) continue;
 ?>
 	<div class="formrow">
 		<div class="label"><label for="<?php echo $item['key']?>"><?php echo $item['class']::getParameterByName($item['key'])?></label></div>

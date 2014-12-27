@@ -78,7 +78,7 @@ else
 <head>
 <meta charset="utf-8">
 <title>نصب CShop</title>
-<link rel="stylesheet" href="../static/css/style.css">
+<link rel="stylesheet" href="../static/css/admin.css">
 </head>
 <body>
 <div id="header">

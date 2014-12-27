@@ -166,7 +166,6 @@ class Application
 			CShop::import(Cshop::$corepath . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'Controller.php',true);
 			$this->_controller = new Controller();
 			$this->_controller->init();
-			
 			if (isset($this->_externalActions[$action]))
 			{
 				foreach ($this->_externalActions[$action] as $a)

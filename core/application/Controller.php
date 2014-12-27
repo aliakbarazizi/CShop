@@ -151,7 +151,7 @@ class Controller extends BaseController
 				CShop::import(Cshop::$gatewaypath . DIRECTORY_SEPARATOR . $gateway[0]['class'] . '.php');
 				
 				/* @var $plugin GatewayBase */
-				$plugin = new $gateway[0]['class']($gateway);
+				$plugin = new $gateway[0]['class']($gateway[0]['id'],$gateway);
 				
 				$message = $plugin->sendToGateway($param, Cshop::siteURL() . Cshop::$baseurl . '/payment.php?gateway='.$_POST['gatewayid']);
 			}
@@ -209,7 +209,7 @@ class Controller extends BaseController
 			CShop::import(Cshop::$gatewaypath . DIRECTORY_SEPARATOR . $gateway[0]['class'] . '.php');
 			
 			/* @var $plugin GatewayBase */
-			$plugin = new $gateway[0]['class']($gateway);
+			$plugin = new $gateway[0]['class']($gateway[0]['id'],$gateway);
 			
 			$payment = $plugin->callbackGateway();
 			

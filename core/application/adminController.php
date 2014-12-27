@@ -13,7 +13,7 @@ class adminController extends BaseController
 	public $pageTitle = 'مدیریت';
 	
 	protected $userType = 'admin';
-//	protected $cache = array('index');
+	protected $cache = array('index');
 	/**
 	 * 
 	 * @var Pagination
@@ -753,7 +753,7 @@ class adminController extends BaseController
 		if (!isset($_GET['id'])) {
 			Cshop::app()->redirect('gateway.php');
 		}
-		$gateways= $this->db->prepare(QueryBuilder::getInstance()->select()->from('gateway')->join('gateway_meta')->on('gatewayid = gateway.id')->where('gateway.id = ?'));
+		$gateways= $this->db->prepare(QueryBuilder::getInstance()->select()->from('gateway')->leftJoin('gateway_meta')->on('gatewayid = gateway.id')->where('gateway.id = ?'));
 		$gateways->execute(array($_GET['id']));
 		$gateways = $gateways->fetchAll();
 	
@@ -894,7 +894,7 @@ class adminController extends BaseController
 			Cshop::app()->redirect('plugin.php');
 		}
 		
-		$plugins= $this->db->prepare(QueryBuilder::getInstance()->select('*,plugin.id as id')->from('plugin')->join('plugin_meta')->on('pluginid = plugin.id')->where('plugin.id = ?'));
+		$plugins= $this->db->prepare(QueryBuilder::getInstance()->select('*,plugin.id as id')->from('plugin')->leftJoin('plugin_meta')->on('pluginid = plugin.id')->where('plugin.id = ?'));
 		$plugins->execute(array($_GET['id']));
 		$plugins = $plugins->fetchAll();
 	

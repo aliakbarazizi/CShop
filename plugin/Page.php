@@ -34,19 +34,8 @@ class Page extends Plugin
 	
 	public static function getParameters()
 	{
-		$inputs = CShop::app()->getDb()->query(QueryBuilder::getInstance()->select()->from('input')->order('`order`'))->fetchAll();
-		$range = array();
-		foreach ($inputs as $input)
-		{
-			$range[$input['id']] = $input['name'];
-		}
-		
+
 		return array(
-			'server'=>array('name'=>'سرور'),
-			'username'=>array('name'=>'نام کاربری'),
-			'password'=>array('name'=>'کلمه عبور'),
-			'usernameinput'=>array('name'=>'فیلد ورودی نام کاربری','type'=>'select','range'=>$range),
-			'passwordinput'=>array('name'=>'فیلد ورودی کلمه عبور','type'=>'select','range'=>$range),
 		);
 	}
 	
@@ -154,7 +143,6 @@ class Page extends Plugin
 				</div>
 			</form>
 			</div>';
-		$controller->renderWithContent($content, array('message'=>$message));
 		$controller->renderWithContent($content, array('message'=>$message));
 	}
 	
@@ -308,4 +296,3 @@ class Page extends Plugin
 		CShop::app()->end();
 	}
 }
-CShop::app()->getCache()->flush();

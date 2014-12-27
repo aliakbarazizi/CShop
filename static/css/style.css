@@ -21,10 +21,11 @@ margin-top:12px;}
 .content{background-color:#fff;width:890px;border:1px solid #d8dadc;padding:5px;float:right;color:#999;margin-bottom:10px;}
 .formbuy{background-color:#f8f8f8;width:215px;border:1px solid #e5e5e5;padding:5px;float:right;}
 .formbuy input,textarea{width:195px;height:20px;padding:5px;border:1px solid #dfdfdf;box-shadow:inset 0 0 9px rgba(0,0,0,0.1);font-size:11px;font-family:Tahoma;color:#a4a4a4;margin-bottom:2px;background:#f8f8f8;}
+.formbuy textarea{height:40px;}
 .formbuy select{width:210px;height:30px;padding:5px;border:1px solid #dfdfdf;box-shadow:inset 0 0 7px rgba(0,0,0,0.1);font-size:11px;font-family:Tahoma;color:#a4a4a4;margin-bottom:5px;}
 .formbuy label{float:right;}
 .formbuy select option{padding:5px;border-right:3px solid #00947a;color:#a9a9a9;cursor:pointer;}
-.formbuy input[type="submit"] {cursor: pointer;background:#00be9c;color:#fff;height:30px;border:none;width:210px;margin-top:5px;}
+.formbuy input[type="submit"] {padding:0 105px;;cursor: pointer;background:#00be9c;color:#fff;height:30px;border:none;width:210px;margin-top:5px;}
 .buybox{background-color:#f8f8f8;width:388px;border:1px solid #e5e5e5;padding:5px;float:right;margin-right:5px;}
 .buybox .select{float:right;}
 .buybox .select li{   -webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;;background:url(../images/button_select.png) no-repeat;width:98px;height:24px;padding:5px;padding-right:30px;cursor:pointer;margin-bottom:3px;}

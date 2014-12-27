@@ -137,7 +137,8 @@ abstract class PluginBase
 			return ;
 		foreach ($setting as $name)
 		{
-			$this->{$name['key']} = $name['value'];
+			if($name['key'])
+				$this->{$name['key']} = $name['value'];
 		}
 	}
 	

@@ -7,7 +7,7 @@
 		<?php echo $content;?>
 	</div>
 	<div class="copyright">
-		تمامی حقوق برای فروشگاه سی شاپ محفوظ میباشد . قدرت گرفته از : <a href="#">فروشگاه ساز سی شاپ</a> ، طراحی قالب توسط : <a href="http://shahkarweb.com/" title="طراحی سایت">طراحان شاهکار</a>
+		تمامی حقوق برای فروشگاه سی شاپ محفوظ میباشد . قدرت گرفته از : <a href="http://cshop.irprog.com/">فروشگاه ساز سی شاپ</a> ، طراحی قالب توسط : <a href="http://shahkarweb.com/" title="طراحی سایت">طراحان شاهکار</a>
 	</div>
 </div>
 <script type="text/javascript">
