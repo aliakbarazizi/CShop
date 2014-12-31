@@ -181,7 +181,7 @@ class adminController extends BaseController
 		{
 			$input = array('name'=>'','description'=>'');
 		}
-	
+		
 		$this->render('admin/inputform', array('message'=>$message,'item'=>$input));
 	}
 	public function actionCategory()

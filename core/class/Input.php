@@ -16,7 +16,6 @@ class Input
 		'textarea'=>array('description'=>'توضیح','callback'=>array(self,'textarea')),
 	);
 	
-	
 	public static function types()
 	{
 		return self::$_types;
@@ -26,9 +25,12 @@ class Input
 		return self::$_types[$type]['description'];
 	}
 	
-	public static function addType($type,$description,$callback)
+	public static function addType($type,$description,$callback,$validate=false)
 	{
-		self::$_types[$type] = array('description'=>$description,'callback'=>$callback);
+		if ($validate)
+			self::$_types[$type] = array('description'=>$description,'validate'=>$validate,'callback'=>$callback);
+		else
+			self::$_types[$type] = array('description'=>$description,'callback'=>$callback);
 	}
 	public static function proccess($name,$input,$value,$htmloptions=array())
 	{

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Parspal Gateway
  * @author Ali Akbar Azizi <aliakbar.azizi20@gmail.com>
@@ -11,192 +12,149 @@ class Parspal extends GatewayBase
 {
 
 	protected $merchant;
+
 	protected $pass;
+
 	protected $title;
-	
+
+	protected $email;
+
+	protected $mobile;
+
 	public static function getData()
 	{
-		return array (
-				'name' => 'پرداخت آنلاین با Jahanpay',
+		return array(
+				'name' => 'پرداخت آنلاین با Parspal',
 				'note' => 'payline',
-				'author' => array (
+				'author' => array(
 						'name' => 'Ir-prog',
-						'url' => 'http://ir-prog.ir',
-						'email' => 'admin@ir-prog.ir' 
-				) 
+						'url' => 'http://irprog.com',
+						'email' => 'admin@ir-prog.ir'
+				)
 		);
 	}
 
 	public static function getParameters()
 	{
-		return array (
-				'merchant' => array('name'=>'شناسه درگاه' ),
-				'pass' => array('name'=>'رمز' ),
-				'title' => array('name'=>'عنوان خرید' ),
+		$inputs = CShop::app()->getDb()
+			->query(
+				QueryBuilder::getInstance()->select()
+					->from('input')
+					->order('`order`'))
+			->fetchAll();
+		$range = array(
+				'' => 'میتوانید خالی باشد'
+		);
+		foreach($inputs as $input)
+		{
+			$range[$input['id']] = $input['name'];
+		}
+		
+		return array(
+				'merchant' => array(
+						'name' => 'شناسه درگاه'
+				),
+				'pass' => array(
+						'name' => 'رمز'
+				),
+				'title' => array(
+						'name' => 'عنوان خرید'
+				),
+				'email' => array(
+						'name' => 'فیلد ایمیل',
+						'type' => 'select',
+						'range' => $range
+				),
+				'mobile' => array(
+						'name' => 'فیلد شماره تماس',
+						'type' => 'select',
+						'range' => $range
+				)
 		);
 	}
 
 	/**
-	 * @param Payment $payment
+	 *
+	 * @param Payment $payment        	
 	 * @see GatewayBase::sendToGateway()
 	 */
 	public function sendToGateway($payment, $callback)
 	{
-		$ParspalPin 	= trim($this->merchant);
-		$pass			= trim($this->pass);
-		$amount 		= round($payment['amount']/10);
-		$invoice_id		= $payment['id'];
-		$callBackUrl 	= $callback;
+		$ParspalPin = trim($this->merchant);
+		$pass = trim($this->pass);
+		$amount = round($payment['amount'] / 10);
+		$invoice_id = $payment['id'];
+		$callBackUrl = $callback;
 		
+		$soapclient = new nusoap_client(
+				'http://merchant.parspal.com/WebService.asmx?wsdl', 'wsdl');
 		$params = array(
-				"MerchantID" =>$ParspalPin,
-				"Password"=>$pass,
+				"MerchantID" => $ParspalPin,
+				"Password" => $pass,
 				"Price" => $amount,
 				"ReturnPath" => $callBackUrl,
 				"ResNumber" => $invoice_id,
-				"Description"=>urlencode($this->title),
-				"Paymenter"=>urlencode('کاربر'),
-				"Email"=>$payment[payment_email],
-				"Mobile"=>$payment[payment_mobile]
+				"Description" => urlencode($this->title),
+				"Paymenter" => urlencode('کاربر'),
+				"Email" => $payment[payment_email],
+				"Mobile" => $payment[payment_mobile]
 		);
-			
-		$link = file_get_contents('http://www.gold-host.ir/payment.php?'.http_build_query($params));
-		$link = json_decode($link,true);
-		$PayPath = $link['PaymentPath'];
-		$Status = $link['ResultStatus'];
+		$res = $soapclient->call('RequestPayment', $params);
+		$PayPath = $res['RequestPaymentResult']['PaymentPath'];
+		$Status = $res['RequestPaymentResult']['ResultStatus'];
 		if(strtolower($Status) == 'succeed')
 		{
-			$update[payment_rand]		= $invoice_id;
-			$sql = $db->prepare("UPDATE `payment` SET `payment_rand` = ? WHERE `payment_rand` = ? LIMIT 1");
-			$sql->execute(array($update[payment_rand],$invoice_id));
-			redirect_to($PayPath);
-		
-		}
-		else
-		{
-				
-			$data[message] = '<font color="red">در اتصال به درگاه پارس پال مشکلی پیش آمد دوباره امتحان کنید و یا به پشتیبانی خبر دهید</font>'.$Status.'<br /><a href="index.php" class="button">بازگشت</a>';
-			throw new Exception($data[message] );
-				
-		}
-		
-		
-		$merchantID 	= trim($this->merchant);
-		$amount 		= round($payment['amount']/10);
-		$invoice_id		= $payment['id'];
-		$callBackUrl 	= $callback;
-		
-		$client = new nusoap_client('http://jahanpay.com/webservice?wsdl', 'wsdl');
-		$res = $client->call('requestpayment', array($merchantID, $amount, $callBackUrl,$invoice_id, urlencode($this->title)));
-		if ($res > 0)
-		{
-			$sql = CShop::app()->getDb()->prepare("UPDATE `payment` SET `reference` = ? WHERE `reference` = ? LIMIT 1");
-			$sql->execute(array (
-					$res,
-					$invoice_id
-			));
-			Cshop::app()->redirect('http://jahanpay.com/pay_invoice/' . $res);
-		
-		}
-		else
+			Cshop::app()->redirect($PayPath);
+		} else
 		{
 			$data = array();
 			$data['status'] = 'error';
-			$data['content'] = 'خطا در اتصال به جهان پی کد خطا' ;
-			$data['message'] = '<font color="red">خطا در اتصال به جهان پی کد خطا</font>' . $res ;
+			$data['message'] = '<font color="red">در اتصال به درگاه پارس پال مشکلی پیش آمد دوباره امتحان کنید و یا به پشتیبانی خبر دهید</font>' .$Status ;
 			return $data;
 		}
 	}
-
+	
+	
 	public function callbackGateway()
 	{
-		global $db,$get;
+		global $db, $get;
 		$Status = $_POST['status'];
 		$Refnumber = $_POST['refnumber'];
 		$Resnumber = $_POST['resnumber'];
-		
-		if ($Status == 100)
+		if($Status == 100)
 		{
-			include_once('lib/nusoap.php');
-			$ParspalPin 	= trim($data[merchant]);
-			$pass		= $data[pass];
-			$sql 		= 'SELECT * FROM `payment` WHERE `payment_rand` = ? LIMIT 1;';
-			$sql = $db->prepare($sql);
-			$sql->execute(array($Resnumber));
-			$payment 	= $sql->fetch();
-			$amount		= round($payment[payment_amount]/10);
+			
+			$ParspalPin = trim($this->merchant);
+			$pass = $this->pass;
+			
+			
+			$payment = Cshop::app()->getDb()->prepare(QueryBuilder::getInstance()->select()->from('payment')->where('reference = ?'));
+			$payment->execute(array($Resnumber));
+			$payment = $payment->fetch();
+
+			$amount = round($payment['amount'] / 10);
+			$soapclient = new nusoap_client(
+					'http://merchant.parspal.com/WebService.asmx?wsdl', 'wsdl');
 			$params = array(
 					'MerchantID' => $ParspalPin,
-					'Password' =>$pass,
+					'Password' => $pass,
 					'Price' => $amount,
-					'RefNum' =>$Refnumber
-			) ;
-		
-			$link = file_get_contents('http://www.gold-host.ir/payment.php?'.http_build_query($params));
-			$link = json_decode($link,true);
-			$Status =$link['ResultStatus'];
-			echo $link['ResultStatus'];
-			var_dump($link);
-			if (strtolower($Status)=='success')//-- موفقیت آمیز
+					'RefNum' => $Refnumber
+			);
+			$res = $soapclient->call('verifyPayment', $params);
+			$Status = $res['verifyPaymentResult']['ResultStatus'];
+			if(strtolower($Status) == 'success') // -- موفقیت آمیز
 			{
-				var_dump('test');
-				//-- آماده کردن خروجی
-				$output[status]		= 1;
-				$output[res_num]	= $Resnumber;
-				$output[ref_num]	= $Refnumber;
-				$output[payment_id]	= $payment[payment_id];
-				var_dump($output);
+				return $payment;
+				
 			}
 			else
 			{
-				//-- در تایید پرداخت مشکلی به‌وجود آمده است‌
-				$output[status]	= 0;
-				$output[message]= 'پرداخت ناموفق است. خطا';
+				$message = 'پرداخت ناموفق است. خطا';
 			}
-		
-		}
-		else
+		} else
 		{
-			$output[status]	= 0;
-			$output[message]= 'پرداخت ناموفق است. خطا';
-		}
-		return $output;
-		
-		
-		
-		
-		$au =  $_GET['au'];
-		$ref_id = $_GET['order_id'];
-		if (strlen($au)>4)
-		{
-			$payment = Cshop::app()->getDb()->prepare(QueryBuilder::getInstance()->select()->from('payment')->where('reference = ?'));
-			$payment->execute(array($au));
-			$payment = $payment->fetch();
-			
-			$merchantID = $this->merchant;
-		
-			$amount		= round($payment[payment_amount]/10);
-			$client = new nusoap_client('http://jahanpay.com/webservice?wsdl', 'wsdl');
-			$res = $client->call("verification", array($merchantID,  $amount,$au));
-			if ($payment['status'] == Application::STATUS_PENDING)
-			{
-				if ( ! empty($res) and $res == 1)
-				{
-					return $payment;
-				}
-				else
-				{
-					$message = 'پرداخت توسط جهان پی انجام نشده است .';
-				}
-			}
-			else
-			{
-				$message = 'سفارش قبلا پرداخت شده است.';
-			}
-		}
-		else
-		{
-			$message = 'شماره یکتا اشتباه است.';
+			$message = 'پرداخت ناموفق است. خطا';
 		}
 		throw new Exception($message);
 	}

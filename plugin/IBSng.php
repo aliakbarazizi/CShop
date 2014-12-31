@@ -84,6 +84,7 @@ class IBSng extends Plugin
 				->on('field.productid = product.id')
 				->where('paymentid = ? AND type="ibsnggroup"'));
 		$sql->execute(array($payment['id']));
+		
 		if($sql->rowCount() !=1)
 			throw new Exception('شما تنها یک محصول از این نوع می توانید انتخاب کنید');
 		$ibs = new IBSngHelper($this->username, $this->password, $this->server);
@@ -95,7 +96,7 @@ class IBSng extends Plugin
 	public function updateUser(&$payment,&$items)
 	{
 		$sql = CShop::app()->getDb()->prepare(QueryBuilder::getInstance()
-						->select('field.name')
+						->select('field.name,item.id')
 						->from('item')
 						->leftJoin('product')
 						->on('product.id = item.productid')
@@ -103,11 +104,13 @@ class IBSng extends Plugin
 						->on('field.productid = product.id')
 						->where('paymentid = ? AND type="ibsnggroup"'));
 		$sql->execute(array($payment['id']));
-		$group = $sql->fetch();
-		$group = $group['name'];
+		$sql = $sql->fetch();
+		$group = $sql['name'];
 		
 		$ibs = new IBSngHelper($this->username, $this->password, $this->server);
-		$ibs->chargeUser($group, $payment['input'][$this->usernameinput], $payment['input'][$this->passwordinput]);
+		$ibs->chargeUser($group, $payment['input'][$this->usernameinput]['value'], $payment['input'][$this->passwordinput]['value']);
+		$items[$sql['id']][] = array('fieldname'=>$payment['input'][$this->usernameinput]['name'],'type'=>'text','value'=>$payment['input'][$this->usernameinput]['value']);
+		$items[$sql['id']][] = array('fieldname'=>$payment['input'][$this->passwordinput]['name'],'type'=>'text','value'=>$payment['input'][$this->passwordinput]['value']);
 	}
 
 }

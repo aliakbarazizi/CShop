@@ -80,7 +80,7 @@ class Jahanpay extends GatewayBase
 			
 			$merchantID = $this->merchant;
 		
-			$amount		= round($payment[payment_amount]/10);
+			$amount		= round($payment['amount']/10);
 			$client = new nusoap_client('http://jahanpay.com/webservice?wsdl', 'wsdl');
 			$res = $client->call("verification", array($merchantID,  $amount,$au));
 			if ($payment['status'] == Application::STATUS_PENDING)

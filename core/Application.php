@@ -134,6 +134,7 @@ class Application
 			}
 			$this->_cache->set('system__plugin', $plugins);
 		}
+		
 		foreach ($plugins as $key=>$value)
 		{
 			CShop::import(CShop::$pluginpath . DIRECTORY_SEPARATOR . $key . '.php',true);

@@ -42,7 +42,7 @@ class Bazpardakht extends GatewayBase
 		curl_close($ch);
 		return $res;
 	}
-	
+		
 	/**
 	 * @param Payment $payment
 	 * @see GatewayBase::sendToGateway()

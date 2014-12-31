@@ -74,7 +74,7 @@ abstract class PluginBase
 		$sql->execute(array($id));
 		$sql = $sql->fetchAll();
 		$class = $sql[0]['class'];
-		return new $class($sql);
+		return new $class($sql[0]['id'],$sql);
 	}
 	
 	public static function proccessInput($parameter,$name,$value='',$htmloptions=array())
