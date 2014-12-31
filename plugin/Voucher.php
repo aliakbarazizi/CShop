@@ -46,7 +46,7 @@ class Voucher extends Plugin
 	
 	public static function install($id)
 	{
-		self::saveMeta($id,array('usernameinput'=>Input::addInput('نام کاربری', 'text'),'passwordinput'=>Input::addInput('کلمه عبور', 'text')));
+		self::saveMeta($id,array('vouchercode'=>Input::addInput('کد تخفیف', self::TYPE_VOUCHER)));
 		$prefix = CShop::app()->getConfig('database');
 		$prefix = $prefix['prefix'];
 		$sql = 'CREATE TABLE `'.$prefix.'voucher` (
@@ -72,7 +72,8 @@ class Voucher extends Plugin
 	
 	public static function uninstall($id)
 	{
-		Input::deleteInput($object->usernameinput);
+		$object = self::loadPlugin($id);
+		Input::deleteInput($object->vouchercode);
 		$prefix = CShop::app()->getConfig('database');
 		$prefix = $prefix['prefix'];
 		$sql = 'DROP TABLE '.$prefix.'voucher';
@@ -83,7 +84,6 @@ class Voucher extends Plugin
 
 	public function register($eventHandler)
 	{
-		CShop::app()->getCache()->flush();
 		Input::addType(self::TYPE_VOUCHER, 'کد تخفیف', array($this,'vocherHtml'));
 		
 		CShop::app()->registerExternalAction('index', 'v', array(
