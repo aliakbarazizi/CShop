@@ -63,7 +63,7 @@ class Voucher extends Plugin
 		$sql = 'CREATE TABLE `'.$prefix.'voucher_meta` (
 		 `id` int(11) NOT NULL AUTO_INCREMENT,
 		 `voucherid` int(11) NOT NULL,
-		 `itemid` int(11) NOT NULL,
+		 `paymentid` int(11) NOT NULL,
 		 `status` tinyint(4) NOT NULL,
 		 PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8';
@@ -196,7 +196,10 @@ class Voucher extends Plugin
 			{
 				if (empty($voucher['code']))
 					throw new Exception('لطفا یک کد انتخاب کنید');
-				$time = time() + 24 * 60 * 60 * $voucher['time'];
+				if ($voucher['time'] != -1)
+					$time = time() + 24 * 60 * 60 * $voucher['time'];
+				else
+					$time = $voucher['time'];
 				$sql = CShop::app()->getDb()->prepare(QueryBuilder::getInstance()->insert('voucher')->into(array('code','time','maxuse','value','productid'),true));
 				$sql->execute(array($voucher['code'],$time,$voucher['maxuse'],$voucher['value'],$voucher['productid']));
 					
@@ -258,7 +261,7 @@ class Voucher extends Plugin
 			Cshop::app()->redirect(self::getActionLink('voucher', $this->id));
 		}
 		
-		$vouchers = CShop::app()->getDb()->prepare(QueryBuilder::getInstance()->select()->from('page')->where('id = ?'));
+		$vouchers = CShop::app()->getDb()->prepare(QueryBuilder::getInstance()->select()->from('voucher')->where('id = ?'));
 		$vouchers->execute(array($_GET['vid']));
 		$vouchers = $vouchers->fetch();
 		
@@ -266,17 +269,20 @@ class Voucher extends Plugin
 			Cshop::app()->redirect(self::getActionLink('voucher', $this->id));
 		}
 		
-		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['مدیریت کدهای تخفیف']['ویرایش کد تخفیف'] = $_SERVER['REQUEST_URI']; });
+		CShop::app()->getEventHandler()->attach(Application::EVENT_MENU, function (&$menu) { $menu['کد تخفیف']['ویرایش کد تخفیف'] = $_SERVER['REQUEST_URI']; });
 		
 		if (isset($_POST['save']))
 		{
-			$voucher = $_POST['page'];
+			$voucher = $_POST['voucher'];
 			//validate
 			try
 			{
-				if (empty($voucher['name']))
-					throw new Exception('لطفا یک عنوان مناسب انتخاب کنید');
-				$time = time() + 24 * 60 * 60 * $voucher['time'];
+				if (empty($voucher['code']))
+					throw new Exception('لطفا یک کد انتخاب کنید');
+				if ($voucher['time'] != -1)
+					$time = time() + 24 * 60 * 60 * $voucher['time'];
+				else
+					$time = $voucher['time'];
 				$sql = CShop::app()->getDb()->prepare(QueryBuilder::getInstance()->update('voucher')->set('code=?,time=?,maxuse=?,value=?,productid=?')->where('id=?'));
 				$sql->execute(array($voucher['code'],$time,$voucher['maxuse'],$voucher['value'],$voucher['productid'],$_GET['vid']));
 				
@@ -294,8 +300,12 @@ class Voucher extends Plugin
 		else
 		{
 			$voucher = $vouchers;
-			$voucher['time'] = round(($voucher['time']-time())/(60*60*24),2);
-			$voucher['time'] = $voucher['time'] > 0 ? $voucher['time'] : 0;
+			if ($voucher['time'] != -1) 
+			{
+				$voucher['time'] = round(($voucher['time']-time())/(60*60*24),2);
+				$voucher['time'] = $voucher['time'] > 0 ? $voucher['time'] : 0;
+			}
+			
 		}
 		
 		
@@ -308,7 +318,7 @@ class Voucher extends Plugin
 				</div>
 				<div class="formrow">
 					<div class="label"><label for="time">تعداد روز استفاده ( -1 برای بینهایت )</label></div>
-					<div class="input"><input type="text" name="voucher[natimeme]" id="time" value="'.$voucher['time'].'"></div>
+					<div class="input"><input type="text" name="voucher[time]" id="time" value="'.$voucher['time'].'"></div>
 				</div>
 				<div class="formrow">
 					<div class="label"><label for="maxuse">تعداد استفاده( -1 برای بینهایت )</label></div>
