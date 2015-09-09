@@ -44,7 +44,7 @@ class adminController extends BaseController
 			$this->user->logout();
 			CShop::app()->redirect('login.php');
 		}
-		$news = json_decode(file_get_contents("http://cshop.irprog.com/user?json&ip=".$_SERVER['REMOTE_ADDR']."&domain=".CShop::siteURL().CShop::$baseurl),true);
+		$news = json_decode(@file_get_contents("http://cshop.irprog.com/user?json&ip=".$_SERVER['REMOTE_ADDR']."&domain=".CShop::siteURL().CShop::$baseurl),true);
 		$this->render('admin/index',array('news'=>$news));
 	}
 	
