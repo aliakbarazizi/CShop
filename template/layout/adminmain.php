@@ -6,6 +6,14 @@
 <link rel="stylesheet" href="<?php echo Cshop::$baseurl?>/static/css/admin.css">
 <link href="<?php echo Cshop::$baseurl?>/static/css/perfect-scrollbar.css" rel="stylesheet">
 
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.js"></script>
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery-ui.js"></script>
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.easing.min.js"></script>
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.quicksand.js"></script>
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/perfect-scrollbar.js"></script>
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.placeholder.js"></script>
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/jquery.noty.packaged.min.js"></script>
 <script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/script.js"></script>
 </head>
 <body>
