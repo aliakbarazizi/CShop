@@ -4,7 +4,8 @@
 <form method="post" name="clear">
 <input type="hidden" name="clear">
 </form>
-<?php foreach($news as $row):?>
+<?php if(is_array($news))
+	foreach($news as $row):?>
 	<div class="user">
 		<div class="button">
 			<form method="post" name="like<?php echo $row['id']?>" action="http://cshop.irprog.com/user" target="_blank"> 
