@@ -25,9 +25,9 @@ margin-top:12px;}
 .formbuy select{width:210px;height:30px;padding:5px;border:1px solid #dfdfdf;box-shadow:inset 0 0 7px rgba(0,0,0,0.1);font-size:11px;font-family:Tahoma;color:#a4a4a4;margin-bottom:5px;}
 .formbuy label{text-align: right;}
 .formbuy select option{padding:5px;border-right:3px solid #00947a;color:#a9a9a9;cursor:pointer;}
-.formbuy input[type="submit"],.formbuy input[type="button"] {padding:0 105px;;cursor: pointer;background:#00be9c;color:#fff;height:30px;border:none;width:210px;margin-top:5px;}
+.formbuy input[type="submit"],.formbuy input[type="button"] {text-align:center;cursor: pointer;background:#00be9c;color:#fff;height:30px;border:none;width:210px;margin-top:5px;}
 .formbuy .voucher input{width:120px;}
-.formbuy .voucher input[type="submit"],.formbuy .voucher input[type="button"]{width:74px;padding: 0 35px;margin-right: 1px;}
+.formbuy .voucher input[type="submit"],.formbuy .voucher input[type="button"]{width:74px;text-align:center;margin-right: 1px;}
 .buybox{background-color:#f8f8f8;width:388px;border:1px solid #e5e5e5;padding:5px;float:right;margin-right:5px;}
 .buybox .select{float:right;}
 .buybox .select li{   -webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;;background:url(../images/button_select.png) no-repeat;width:98px;height:24px;padding:5px;padding-right:30px;cursor:pointer;margin-bottom:3px;}

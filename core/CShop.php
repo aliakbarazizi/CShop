@@ -131,6 +131,7 @@ class CShop
 				}
 			}
 		}
+		
 	}
 	
 	public static function import($className,$force=false)
