@@ -1,4 +1,5 @@
 <?php 
+
 $pages = array(
 		CShop::app()->systemConfig()->sitetitle => CShop::$baseurl,
 		
@@ -15,9 +16,71 @@ CShop::app()->raise(Application::EVENT_PAGE, array(&$pages));
 <meta content="0" http-equiv="Expires"></meta>
 
 <title><?php echo CShop::app()->systemConfig()->sitetitle . ' - ' . $this->pageTitle?></title>
-<link rel="stylesheet" href="<?php echo Cshop::$baseurl?>/static/css/style.css" type="text/css"/>
-<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/script.js"></script>
-<link href="<?php echo Cshop::$baseurl?>/static/css/perfect-scrollbar.css" rel="stylesheet">
+<?php 
+/*		
+ 
+  minify  js  for site 
+  
+ */ 
+
+$base=Cshop::$rootpath ;
+$filename=  $base."/static/js/final.js";
+if(!file_exists($filename))
+{
+
+
+$filename=  $base."/static/js/jquery.js";
+$js= file_get_contents($filename);
+$filename=  $base."/static/js/jquery-ui.js";
+$js.= file_get_contents($filename);
+$filename=  $base."/static/js/jquery.mousewheel.js";
+$js.= file_get_contents($filename);
+$filename=  $base."/static/js/perfect-scrollbar.js";
+$js.= file_get_contents($filename);
+$filename=  $base."/static/js/jquery.placeholder.js";
+$js.= file_get_contents($filename);
+$filename=  $base."/static/js/jquery.noty.packaged.min.js";
+$js.= file_get_contents($filename);
+$filename=  $base."/static/js/script.js";
+$js.= file_get_contents($filename);
+
+$js=JSMin::minify($js);
+$destination=$base;
+$destination.='/static/js/';
+$name='final.js';
+
+file_put_contents($destination.$name,$js);
+}
+/*
+
+ minify  css for site
+
+*/
+
+$base=Cshop::$rootpath ;
+$filename=  $base."/static/css/final.css";
+if(!file_exists($filename))
+{
+
+
+	$filename=  $base."/static/css/style.css";
+	$css= file_get_contents($filename);
+	$filename=  $base."/static/css/perfect-scrollbar.css";
+	$css.= file_get_contents($filename);
+
+
+	$minify = new CSSmin();
+	$css=$minify->run($css,true);
+	$destination=$base;
+	$destination.='/static/css/';
+	$name='final.css';
+
+	file_put_contents($destination.$name,$css);
+}
+?>
+<link rel="stylesheet" href="<?php echo Cshop::$baseurl?>/static/css/final.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo Cshop::$baseurl?>/static/js/final.js"></script>
+
 
 </head>
 <body>
