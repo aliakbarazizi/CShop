@@ -37,9 +37,9 @@ class Application
 	private $_cache;
 	/**
 	 * 
-	 * @var SystemConfig
+	 * @var SystemOption
 	 */
-	private $_systemconfig;
+	private $_systemoption;
 	/**
 	 * 
 	 * @var EventHandler
@@ -189,19 +189,19 @@ class Application
 	}
 	/**
 	 * 
-	 * @return SystemConfig
+	 * @return SystemOption
 	 */
-	public function systemConfig()
+	public function systemOption()
 	{
-		if (!$this->_systemconfig)
+		if (!$this->_systemoption)
 		{
-			if(!$this->_systemconfig = $this->_cache->get('system__config'))
+			if(!$this->_systemoption = $this->_cache->get('system__option'))
 			{
-				$this->_systemconfig = new SystemConfig($this->loadConfig());
-				$this->_cache->set('system__config',$this->_systemconfig);
+				$this->_systemoption = new SystemOption($this->loadConfig());
+				$this->_cache->set('system__option',$this->_systemoption);
 			}
 		}
-		return $this->_systemconfig;
+		return $this->_systemoption;
 	}
 	
 	public function loadConfig($category = self::APPLICATON_CONFIG_CATEGORY)

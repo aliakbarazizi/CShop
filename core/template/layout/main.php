@@ -1,7 +1,7 @@
 <?php 
 
 $pages = array(
-		CShop::app()->systemConfig()->sitetitle => CShop::$baseurl,
+		CShop::app()->systemOption()->sitetitle => CShop::$baseurl,
 		
 );
 CShop::app()->raise(Application::EVENT_PAGE, array(&$pages));
@@ -15,7 +15,7 @@ CShop::app()->raise(Application::EVENT_PAGE, array(&$pages));
 <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"></meta>
 <meta content="0" http-equiv="Expires"></meta>
 
-<title><?php echo CShop::app()->systemConfig()->sitetitle . ' - ' . $this->pageTitle?></title>
+<title><?php echo CShop::app()->systemOption()->sitetitle . ' - ' . $this->pageTitle?></title>
 <?php 
 /*		
  

@@ -682,6 +682,9 @@ class adminController extends BaseController
 				CShop::import($file,true);
 				$class::uninstall($value);
 				
+				$sql = $this->db->prepare(QueryBuilder::getInstance()->delete('option')->where('category = ?'));
+				$sql->execute(array($class));
+				
 				$sql = $this->db->prepare(QueryBuilder::getInstance()->delete('gateway')->where('id = ?'));
 				$sql->execute(array($value));
 			}
@@ -717,7 +720,7 @@ class adminController extends BaseController
 			$sql->execute(array('name'=>$data['name'],'class'=>$class,'status'=>Application::STATUS_ACTIVE));
 			$id = $this->db->lastInsertId();
 			foreach ($class::getParameters() as $key=>$value)
-				$this->db->exec(QueryBuilder::getInstance()->insert('gateway_meta')->into('gatewayid,`key`,value')->values(array($id,$key,'')));
+				$this->db->exec(QueryBuilder::getInstance()->insert('option')->into('`key`,`category`,value,description')->values(array($key,$class,'',$value['name'])));
 			$data = $class::install($id);
 			CShop::app()->getCache()->flush();
 			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
@@ -753,7 +756,7 @@ class adminController extends BaseController
 		if (!isset($_GET['id'])) {
 			Cshop::app()->redirect('gateway.php');
 		}
-		$gateways= $this->db->prepare(QueryBuilder::getInstance()->select()->from('gateway')->leftJoin('gateway_meta')->on('gatewayid = gateway.id')->where('gateway.id = ?'));
+		$gateways= $this->db->prepare(QueryBuilder::getInstance()->select()->from('gateway')->leftJoin('option')->on('`class` = category')->where('gateway.id = ?'));
 		$gateways->execute(array($_GET['id']));
 		$gateways = $gateways->fetchAll();
 	
@@ -785,8 +788,8 @@ class adminController extends BaseController
 		{
 			foreach ($_POST['meta'] as $key=>$value)
 			{
-				$sql = $this->db->prepare(QueryBuilder::getInstance()->update('gateway_meta')->set('value=?')->where('`key`=? AND gatewayid = ?'));
-				$sql->execute(array($value,$key,$_GET['id']));
+				$sql = $this->db->prepare(QueryBuilder::getInstance()->update('option')->set('value=?')->where('`key`=? AND category = ?'));
+				$sql->execute(array($value,$key,$class));
 			}
 			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
 			$message['type'] = 'success';
@@ -824,6 +827,10 @@ class adminController extends BaseController
 				$file = Cshop::$pluginpath . DIRECTORY_SEPARATOR . $class .'.php';
 				CShop::import($file,true);
 				$class::uninstall($value);
+				
+				$sql = $this->db->prepare(QueryBuilder::getInstance()->delete('option')->where('category = ?'));
+				$sql->execute(array($class));
+				
 				$sql = $this->db->prepare(QueryBuilder::getInstance()->delete('plugin')->where('id = ?'));
 				$sql->execute(array($value));
 			}
@@ -858,7 +865,7 @@ class adminController extends BaseController
 			$sql->execute(array('name'=>$data['name'],'class'=>$class,'status'=>Application::STATUS_ACTIVE));
 			$id = $this->db->lastInsertId();
 			foreach ($class::getParameters() as $key=>$value)
-				$this->db->exec(QueryBuilder::getInstance()->insert('plugin_meta')->into('pluginid,`key`,value')->values(array($id,$key,'')));
+				$this->db->exec(QueryBuilder::getInstance()->insert('option')->into('`key`,`category`,value,description')->values(array($key,$class,'',$value['name'])));
 			$data = $class::install($id);
 			CShop::app()->getCache()->flush();
 			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
@@ -894,7 +901,7 @@ class adminController extends BaseController
 			Cshop::app()->redirect('plugin.php');
 		}
 		
-		$plugins= $this->db->prepare(QueryBuilder::getInstance()->select('*,plugin.id as id')->from('plugin')->leftJoin('plugin_meta')->on('pluginid = plugin.id')->where('plugin.id = ?'));
+		$plugins= $this->db->prepare(QueryBuilder::getInstance()->select('*,plugin.id as id')->from('plugin')->leftJoin('option')->on('class = category')->where('plugin.id = ?'));
 		$plugins->execute(array($_GET['id']));
 		$plugins = $plugins->fetchAll();
 	
@@ -927,8 +934,8 @@ class adminController extends BaseController
 		{
 			foreach ($_POST['meta'] as $key=>$value)
 			{
-				$sql = $this->db->prepare(QueryBuilder::getInstance()->update('plugin_meta')->set('value=?')->where('`key`=? AND pluginid = ?'));
-				$sql->execute(array($value,$key,$_GET['id']));
+				$sql = $this->db->prepare(QueryBuilder::getInstance()->update('option')->set('value=?')->where('`key`=? AND category = ?'));
+				$sql->execute(array($value,$key,$class));
 			}
 			$message['content'] = 'تغییرات با موفقیت ذخیره شد';
 			$message['type'] = 'success';
@@ -950,16 +957,16 @@ class adminController extends BaseController
 			{
 				foreach ($config as $key=>$value)
 				{
-					$sql = $this->db->prepare(QueryBuilder::getInstance()->select()->from('config')->where("category=? AND `key`=?"));
+					$sql = $this->db->prepare(QueryBuilder::getInstance()->select()->from('option')->where("category=? AND `key`=?"));
 					$sql->execute(array(Application::APPLICATON_CONFIG_CATEGORY,$key));
 					if ($sql->rowCount() == 1)
 					{
-						$sql = $this->db->prepare(QueryBuilder::getInstance()->update('config')->set('value=?,description=?')->where('`key`=? AND category=?'));
+						$sql = $this->db->prepare(QueryBuilder::getInstance()->update('option')->set('value=?,description=?')->where('`key`=? AND category=?'));
 						$sql->execute(array($value,CShop::app()->systemConfig()->description($key),$key,Application::APPLICATON_CONFIG_CATEGORY));
 					}
 					else 
 					{
-						$sql = $this->db->prepare(QueryBuilder::getInstance()->insert('config')->into(array('`key`','value','description','category'),true,false));
+						$sql = $this->db->prepare(QueryBuilder::getInstance()->insert('option')->into(array('`key`','value','description','category'),true,false));
 						$sql->execute(array($key,$value,CShop::app()->systemConfig()->description($key),Application::APPLICATON_CONFIG_CATEGORY));	
 					}
 				}

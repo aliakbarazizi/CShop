@@ -96,8 +96,8 @@ class Controller extends BaseController
 				$gateway = $this->db->prepare(QueryBuilder::getInstance()
 						->select()
 						->from('gateway')
-						->leftJoin('gateway_meta')
-						->on('gatewayid = gateway.id')
+						->leftJoin('option')
+						->on('`class` = category')
 						->where('gateway.id = ?'));
 				
 				$gateway->execute(array($_POST['gatewayid']));
@@ -195,8 +195,8 @@ class Controller extends BaseController
 			$gateway = $this->db->prepare(QueryBuilder::getInstance()
 					->select()
 					->from('gateway')
-					->leftJoin('gateway_meta')
-					->on('gatewayid = gateway.id')
+					->leftJoin('option')
+					->on('class = category')
 					->where('gateway.id = ?'));
 			$gateway->execute(array($_GET['gateway']));
 			$gateway = $gateway->fetchAll();

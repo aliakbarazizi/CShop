@@ -42,7 +42,7 @@ class CShop
 		'PluginBase' => '/class/PluginBase.php',
 		'Plugin' => '/class/Plugin.php',
 		'QueryBuilder' => '/class/QueryBuilder.php',
-		'SystemConfig' => '/class/SystemConfig.php',
+		'SystemOption' => '/class/SystemOption.php',
 		'User' => '/class/User.php',
 		'Validate' => '/class/Validate.php',
 		
