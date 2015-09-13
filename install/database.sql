@@ -30,16 +30,6 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@field` (
   KEY `fk_field_product1_idx` (`productid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `@{prefix}@gateway` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(256) NOT NULL,
-  `class` varchar(120) NOT NULL,
-  `status` tinyint(4) NOT NULL,
-  `order` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `class_UNIQUE` (`class`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `@{prefix}@input` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(120) NOT NULL,
@@ -86,7 +76,6 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@payment` (
   `reference` varchar(120) DEFAULT NULL,
   `gatewayid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_payment_gateway1_idx` (`gatewayid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 CREATE TABLE IF NOT EXISTS `@{prefix}@payment_meta` (
@@ -104,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@plugin` (
   `class` varchar(120) NOT NULL,
   `status` tinyint(4) NOT NULL,
   `order` int(11) NOT NULL DEFAULT '0',
-  `autoload` tinyint(4) NOT NULL,
+  `type` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `class_UNIQUE` (`class`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
@@ -140,9 +129,6 @@ ALTER TABLE `@{prefix}@input`
 ALTER TABLE `@{prefix}@item`
   ADD CONSTRAINT `fk_card_payment1` FOREIGN KEY (`paymentid`) REFERENCES `@{prefix}@payment` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_card_product1` FOREIGN KEY (`productid`) REFERENCES `@{prefix}@product` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
-
-ALTER TABLE `@{prefix}@payment`
-  ADD CONSTRAINT `fk_payment_gateway1` FOREIGN KEY (`gatewayid`) REFERENCES `@{prefix}@gateway` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
 
 ALTER TABLE `@{prefix}@payment_meta`
   ADD CONSTRAINT `fk_input_payment1` FOREIGN KEY (`paymentid`) REFERENCES `@{prefix}@payment` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
