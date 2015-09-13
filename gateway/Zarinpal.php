@@ -8,7 +8,7 @@
  * @license http://cshop.irprog.com/licence.txt
  * @package components.gateway
  */
-class Parspal extends GatewayBase
+class Zarinpal extends GatewayBase
 {
 
 	protected $merchant;

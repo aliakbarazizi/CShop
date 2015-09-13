@@ -41,8 +41,7 @@ if (isset($_POST['save']))
 			$config = str_replace('{'.$key.'}', $value, $config);
 		}
 		file_put_contents('../config.php', $config);
-		$success = true;
-		$message = 'اسکریپت با موفقیت نصب شد. میتوانید پوشه install را پاک کنید<br>لینک مدیریت : <a href="../admin">کلیک کنید</a>';
+		
 		
 		try {
 			$sqls = file_get_contents('database.sql');
@@ -59,6 +58,9 @@ if (isset($_POST['save']))
 		{
 			throw new Exception('خطا در ساخت دیتابیس، متن خطا : '.$e->getMessage());
 		}
+		
+		$success = true;
+		$message = 'اسکریپت با موفقیت نصب شد. میتوانید پوشه install را پاک کنید<br>لینک مدیریت : <a href="../admin">کلیک کنید</a>';
 	}
 	catch (Exception $e)
 	{

@@ -75,12 +75,12 @@ class QueryBuilder
 		{
 			foreach ($tables as $key=>$value)
 			{
-				$tables[$key] = $this->_prefix . $value  . ' AS '.$tables;
+				$tables[$key] = '`' . $this->_prefix . $value  . '` AS `'.$value . '`';
 			}
 			$this->_query .= implode(',', $tables);
 		}
 		else
-			$this->_query .= $this->_prefix . $tables . ' AS '.$tables;
+			$this->_query .= '`' . $this->_prefix . $tables . '` AS `'.$tables . '`';
 
 		$this->_query .= ' ';
 		return $this;
@@ -94,12 +94,12 @@ class QueryBuilder
 		{
 			foreach ($tables as $key=>$value)
 			{
-				$tables[$key] = $this->_prefix . $value  . ' AS '.$tables;
+				$tables[$key] = '`' . $this->_prefix . $value  . '` AS `'.$value . '`';
 			}
 			$this->_query .= implode(',', $tables);
 		}
 		else
-			$this->_query .= $this->_prefix . $tables  . ' AS '.$tables;
+			$this->_query .= '`' . $this->_prefix . $tables  . '` AS `'.$tables . '`';
 		$this->_query .= ' ';
 		return $this;
 	}
@@ -112,12 +112,12 @@ class QueryBuilder
 		{
 			foreach ($tables as $key=>$value)
 			{
-				$tables[$key] = $this->_prefix . $value  . ' AS '.$tables;
+				$tables[$key] = '`' . $this->_prefix . $value  . '` AS `'.$value . '`';
 			}
 			$this->_query .= implode(',', $tables);
 		}
 		else
-			$this->_query .= $this->_prefix . $tables  . ' AS '.$tables;
+			$this->_query .= '`' . $this->_prefix . $tables  . '` AS `'.$tables . '`';
 		$this->_query .= ' ';
 		return $this;
 	}
@@ -130,12 +130,12 @@ class QueryBuilder
 		{
 			foreach ($tables as $key=>$value)
 			{
-				$tables[$key] = $this->_prefix . $value  . ' AS '.$tables ;
+				$tables[$key] = '`' . $this->_prefix . $value  . '` AS `'.$value . '`';
 			}
 			$this->_query .= implode(',', $tables);
 		}
 		else
-			$this->_query .= $this->_prefix . $tables  . ' AS '.$tables;
+			$this->_query .= '`' . $this->_prefix . $tables  . '` AS `'.$tables . '`';
 		$this->_query .= ' ';
 		return $this;
 	}
@@ -148,12 +148,12 @@ class QueryBuilder
 		{
 			foreach ($tables as $key=>$value)
 			{
-				$tables[$key] = $this->_prefix . $value . ' AS '.$tables;
+				$tables[$key] = '`' . $this->_prefix . $value . '` AS `'.$value . '`';
 			}
 			$this->_query .= implode(',', $tables);
 		}
 		else
-			$this->_query .= $this->_prefix . $tables . ' AS '.$tables;
+			$this->_query .= '`' . $this->_prefix . $tables . '` AS `'.$tables . '`';
 		$this->_query .= ' ';
 		return $this;
 	}
@@ -249,13 +249,13 @@ class QueryBuilder
 	
 	public function delete($from)
 	{
-		$this->_query .= 'DELETE '.$from.' FROM '.$this->_prefix . $from . ' AS '.$from.' ';
+		$this->_query .= 'DELETE '.$from.' FROM `'.$this->_prefix . $from . '` AS `'.$from.'` ';
 		return $this;
 	}
 	
 	public function insert($table)
 	{
-		$this->_query .= 'INSERT INTO '.$this->_prefix . $table.' ';
+		$this->_query .= 'INSERT INTO `'.$this->_prefix . $table.'` ';
 	
 		return $this;
 	}
@@ -295,7 +295,7 @@ class QueryBuilder
 	
 	public function update($from)
 	{
-		$this->_query .= 'UPDATE '.$this->_prefix . $from . ' AS '.$from.' ';
+		$this->_query .= 'UPDATE `'.$this->_prefix . $from . '` AS `'.$from.'` ';
 		return $this;
 	}
 	

@@ -125,7 +125,7 @@ class Application
 		
 		if (! $plugins = $this->_cache->get('system__plugin'))
 		{
-			$sql = 	$this->_db->query(QueryBuilder::getInstance()->select('*,plugin.id')->from('plugin')->leftJoin('plugin_meta')->on('pluginid = plugin.id')->where('status = 1'));
+			$sql = 	$this->_db->query(QueryBuilder::getInstance()->select('*,plugin.id')->from('plugin')->leftJoin('option')->on('category = `class`')->where('status = 1'));
 			$plugins = array();
 			while ($row = $sql->fetch())
 			{
@@ -207,7 +207,7 @@ class Application
 	public function loadConfig($category = self::APPLICATON_CONFIG_CATEGORY)
 	{
 		
-		$sql = $this->_db->query(QueryBuilder::getInstance()->select()->from('config')->where('category="'.$category.'"'));
+		$sql = $this->_db->query(QueryBuilder::getInstance()->select()->from('option')->where('category="'.$category.'"'));
 		$config = array();
 		while ($row = $sql->fetch())
 		{

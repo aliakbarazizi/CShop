@@ -8,6 +8,8 @@
  */
 class CShop
 {
+	const VERSION = "1.1.1";
+	
 	public static $rootpath;
 	public static $corepath;
 	public static $pluginpath;
@@ -60,7 +62,7 @@ class CShop
 		self::$corepath = __DIR__;
 		self::$pluginpath = self::$rootpath . DIRECTORY_SEPARATOR . 'plugin';
 		self::$gatewaypath = self::$rootpath . DIRECTORY_SEPARATOR . 'gateway';
-		self::$templatepath = self::$rootpath . DIRECTORY_SEPARATOR . 'template';
+		self::$templatepath = self::$corepath . DIRECTORY_SEPARATOR . 'template';
 		self::$classpath = self::$corepath . DIRECTORY_SEPARATOR . 'class';
 		self::$librarypath = self::$corepath . DIRECTORY_SEPARATOR . 'library';
 		
@@ -131,7 +133,6 @@ class CShop
 				}
 			}
 		}
-		
 	}
 	
 	public static function import($className,$force=false)

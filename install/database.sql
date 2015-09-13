@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@admin` (
   `email` varchar(120) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `@{prefix}@category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -13,29 +13,22 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@category` (
   `description` text NOT NULL,
   `order` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `@{prefix}@category` (`id`, `name`, `description`, `order`) VALUES
 (1, 'همراه اول', 'کارت شارژ همراه اول', 1),
 (2, 'ایرانسل', 'کارت شارژ ایرانسل', 2),
 (3, 'رایتل', 'کارت شارژ رایتل', 3);
 
-CREATE TABLE IF NOT EXISTS `@{prefix}@config` (
-  `key` varchar(120) NOT NULL,
-  `category` varchar(120) NOT NULL,
-  `value` varchar(120) NOT NULL,
-  `description` text NOT NULL,
-  PRIMARY KEY (`key`,`category`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `@{prefix}@field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `productid` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
   `type` varchar(256) NOT NULL,
+  `default` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_field_product1_idx` (`productid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `@{prefix}@gateway` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -47,22 +40,15 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@gateway` (
   UNIQUE KEY `class_UNIQUE` (`class`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `@{prefix}@gateway_meta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `gatewayid` int(11) NOT NULL,
-  `key` varchar(45) NOT NULL,
-  `value` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_gateway_meta_gateway1_idx` (`gatewayid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-
 CREATE TABLE IF NOT EXISTS `@{prefix}@input` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(120) NOT NULL,
   `type` varchar(120) NOT NULL DEFAULT 'text',
   `order` int(11) NOT NULL DEFAULT '0',
   `data` text,
-  PRIMARY KEY (`id`)
+  `productid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_input_product1_idx` (`productid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 INSERT INTO `@{prefix}@input` ( `name`, `type`, `order`, `data`) VALUES
@@ -81,6 +67,14 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@item` (
   KEY `fk_card_product1_idx` (`productid`),
   KEY `fk_card_payment1_idx` (`paymentid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `@{prefix}@option` (
+  `key` varchar(120) NOT NULL,
+  `category` varchar(120) NOT NULL,
+  `value` varchar(120) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`key`,`category`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `@{prefix}@payment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -110,18 +104,10 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@plugin` (
   `class` varchar(120) NOT NULL,
   `status` tinyint(4) NOT NULL,
   `order` int(11) NOT NULL DEFAULT '0',
+  `autoload` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `class_UNIQUE` (`class`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-
-CREATE TABLE IF NOT EXISTS `@{prefix}@plugin_meta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pluginid` int(11) NOT NULL,
-  `key` varchar(120) NOT NULL,
-  `value` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_plugin_meta_plugin1_idx` (`pluginid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `@{prefix}@product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -148,8 +134,8 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@value` (
 ALTER TABLE `@{prefix}@field`
   ADD CONSTRAINT `fk_field_product1` FOREIGN KEY (`productid`) REFERENCES `@{prefix}@product` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
-ALTER TABLE `@{prefix}@gateway_meta`
-  ADD CONSTRAINT `fk_gateway_meta_gateway1` FOREIGN KEY (`gatewayid`) REFERENCES `@{prefix}@gateway` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `@{prefix}@input`
+  ADD CONSTRAINT `fk_input_product1` FOREIGN KEY (`productid`) REFERENCES `@{prefix}@product` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
 
 ALTER TABLE `@{prefix}@item`
   ADD CONSTRAINT `fk_card_payment1` FOREIGN KEY (`paymentid`) REFERENCES `@{prefix}@payment` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION,
@@ -161,9 +147,6 @@ ALTER TABLE `@{prefix}@payment`
 ALTER TABLE `@{prefix}@payment_meta`
   ADD CONSTRAINT `fk_input_payment1` FOREIGN KEY (`paymentid`) REFERENCES `@{prefix}@payment` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_payment_meta_input1` FOREIGN KEY (`inputid`) REFERENCES `@{prefix}@input` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
-ALTER TABLE `@{prefix}@plugin_meta`
-  ADD CONSTRAINT `fk_plugin_meta_plugin1` FOREIGN KEY (`pluginid`) REFERENCES `@{prefix}@plugin` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 ALTER TABLE `@{prefix}@product`
   ADD CONSTRAINT `fk_product_category` FOREIGN KEY (`categoryid`) REFERENCES `@{prefix}@category` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;

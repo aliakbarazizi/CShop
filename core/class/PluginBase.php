@@ -23,9 +23,9 @@ abstract class PluginBase
 				'name'=>'Plugin',
 				'note'=>'This is abstract of Plugin',
 				'author'=>array(
-						'name'=>'Ir-prog',
-						'url'=>'http://ir-prog.ir',
-						'email'=>'admin@ir-prog.ir',
+						'name'=>'Irprog',
+						'url'=>'http://irprog.com',
+						'email'=>'admin@irprog.com',
 				)
 		);
 	}
@@ -63,14 +63,14 @@ abstract class PluginBase
 	{
 		foreach ($meta as $key=>$value)
 		{
-			$sql = CShop::app()->getDb()->prepare(QueryBuilder::getInstance()->update('plugin_meta')->set('value=?')->where('`key`=? AND pluginid = ?'));
+			$sql = CShop::app()->getDb()->prepare(QueryBuilder::getInstance()->update('option')->set('value=?')->where('`key`=? AND pluginid = ?'));
 			$sql->execute(array($value,$key,$id));
 		}
 	}
 	
 	public static function loadPlugin($id)
 	{
-		$sql = 	CShop::app()->getDb()->prepare(QueryBuilder::getInstance()->select('*')->from('plugin')->leftJoin('plugin_meta')->on('pluginid = plugin.id')->where('plugin.id = ?'));
+		$sql = 	CShop::app()->getDb()->prepare(QueryBuilder::getInstance()->select('*')->from('plugin')->leftJoin('option')->on('category = `class`')->where('plugin.id = ?'));
 		$sql->execute(array($id));
 		$sql = $sql->fetchAll();
 		$class = $sql[0]['class'];
