@@ -173,9 +173,10 @@ class Controller extends BaseController
 							->where('id IN ('.implode(',', $additemids).')'));
 			}
 		}
+		
 		$product = new Model($this->db->query(QueryBuilder::getInstance()->select()->from('product')->order('`order`')));
 		$category = new Model($this->db->query(QueryBuilder::getInstance()->select()->from('category')->order('`order`')));
-		$gateway = new Model($this->db->query(QueryBuilder::getInstance()->select()->from('gateway')));
+		$gateway = new Model($this->db->query(QueryBuilder::getInstance()->select()->from('plugin')->where('type='.Application::PLUGIN_TYPE_GATEWAY)->order('`order`')));
 		$input = new Model($this->db->query(QueryBuilder::getInstance()->select()->from('input')->order('`order`')));
 		$this->render('site/index', array('input'=>$input,'product'=>$product,'category'=>$category,'gateway'=>$gateway,'message'=>$message));
 	}

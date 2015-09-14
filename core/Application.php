@@ -28,6 +28,9 @@ class Application
 	
 	const APPLICATON_CONFIG_CATEGORY = 'system';
 	
+	const PLUGIN_TYPE_NORMAL = 0;
+	const PLUGIN_TYPE_AUTOLOAD = 1;
+	const PLUGIN_TYPE_GATEWAY = 2;
 	/**
 	 *
 	 * @var Database
@@ -125,7 +128,7 @@ class Application
 		
 		if (! $plugins = $this->_cache->get('system__plugin'))
 		{
-			$sql = 	$this->_db->query(QueryBuilder::getInstance()->select('*,plugin.id')->from('plugin')->leftJoin('option')->on('category = `class`')->where('status = 1'));
+			$sql = 	$this->_db->query(QueryBuilder::getInstance()->select('*,plugin.id')->from('plugin')->leftJoin('option')->on('category = `class`')->where('status = 1 and type = '.Application::PLUGIN_TYPE_AUTOLOAD));
 			$plugins = array();
 			while ($row = $sql->fetch())
 			{
