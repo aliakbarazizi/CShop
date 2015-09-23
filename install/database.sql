@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `@{prefix}@payment` (
   `paymenttime` int(10) unsigned DEFAULT NULL,
   `reference` varchar(120) DEFAULT NULL,
   `gatewayid` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 CREATE TABLE IF NOT EXISTS `@{prefix}@payment_meta` (
