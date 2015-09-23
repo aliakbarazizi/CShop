@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title><?php echo CShop::app()->systemConfig()->sitetitle . ' - ' . $this->pageTitle?></title>
+<title><?php echo CShop::app()->systemOption()->sitetitle . ' - ' . $this->pageTitle?></title>
 <link rel="stylesheet" href="<?php echo Cshop::$baseurl?>/static/css/admin.css">
 <link href="<?php echo Cshop::$baseurl?>/static/css/perfect-scrollbar.css" rel="stylesheet">
 
@@ -17,7 +17,7 @@
 			<div class="menu">
 				<div class="menu-main-container">
 					<ul id="menu-main" class="menu">
-						<li class="menu-item "><a href="<?php echo CShop::$baseurl?>" class="active"><?php echo CShop::app()->systemConfig()->sitetitle?></a></li>
+						<li class="menu-item "><a href="<?php echo CShop::$baseurl?>" class="active"><?php echo CShop::app()->systemOption()->sitetitle?></a></li>
 					</ul>
 				</div>
 			</div>

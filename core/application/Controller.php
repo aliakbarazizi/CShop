@@ -14,6 +14,54 @@ class Controller extends BaseController
 	
 	protected $cache = array('index');
 	
+	public function beforeAction($action)
+	{
+		$base=Cshop::$rootpath;
+		
+		$jsfilename =  $base."/static/cache/final.js";
+		if(!file_exists($jsfilename))
+		{
+		
+		
+			$filename=  $base."/static/js/jquery.js";
+			$js= file_get_contents($filename);
+			$filename=  $base."/static/js/jquery-ui.js";
+			$js.= file_get_contents($filename);
+			$filename=  $base."/static/js/jquery.mousewheel.js";
+			$js.= file_get_contents($filename);
+			$filename=  $base."/static/js/perfect-scrollbar.js";
+			$js.= file_get_contents($filename);
+			$filename=  $base."/static/js/jquery.placeholder.js";
+			$js.= file_get_contents($filename);
+			$filename=  $base."/static/js/jquery.noty.packaged.min.js";
+			$js.= file_get_contents($filename);
+			$filename=  $base."/static/js/script.js";
+			$js.= file_get_contents($filename);
+		
+			$js=JSMin::minify($js);
+		
+			file_put_contents($jsfilename,$js);
+		}
+		
+		$cssfilename=  $base."/static/cache/final.css";
+		if(!file_exists($cssfilename))
+		{
+		
+			$filename=  $base."/static/css/style.css";
+			$css= file_get_contents($filename);
+			$filename=  $base."/static/css/perfect-scrollbar.css";
+			$css.= file_get_contents($filename);
+		
+		
+			$minify = new CSSmin();
+			$css=$minify->run($css,true);
+		
+			file_put_contents($cssfilename,$css);
+		}
+		
+		return parent::beforeAction($action);
+	}
+	
 	public function actionIndex()
 	{
 		$message['content']  = '';

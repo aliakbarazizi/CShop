@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
 		<meta charset="UTF-8" />
-        <title><?php echo CShop::app()->systemConfig()->sitetitle . ' - ' . $this->pageTitle?></title>
+        <title><?php echo CShop::app()->systemOption()->sitetitle . ' - ' . $this->pageTitle?></title>
         <link rel="stylesheet" type="text/css" href="<?php echo CShop::$baseurl?>/static/css/loginstyle.css" />
     </head>
     <body>

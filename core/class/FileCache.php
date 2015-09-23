@@ -24,14 +24,16 @@ class FileCache extends Cache
 	private $_gcProbability=100;
 	private $_gced=false;
 
-	public function __construct()
+	public function __construct($cachePath = null)
 	{
-		$this->init();
+		$this->init($cachePath);
 	}
 	
-	public function init()
+	public function init($cachePath = null)
 	{
 		parent::init();
+		if($cachePath)
+			$this->cachePath = $cachePath;
 		if($this->cachePath===null)
 			$this->cachePath=CShop::$corepath.DIRECTORY_SEPARATOR.'cache';
 		if(!is_dir($this->cachePath))

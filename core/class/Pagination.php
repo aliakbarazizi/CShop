@@ -26,7 +26,7 @@ class Pagination
 		$this->current = $page;
 		
 		if ($pageLimit === false)
-			$pageLimit = CShop::app()->systemConfig()->pagelimit;
+			$pageLimit = CShop::app()->systemOption()->pagelimit;
 		$this->pageLimit = $pageLimit;
 	}
 	
